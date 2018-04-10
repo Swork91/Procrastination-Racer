@@ -21,8 +21,8 @@ public MainLauncher() {
 		MainLauncher mainWindow = new MainLauncher();
 		mainWindow.setTitle("Procrastination Racer "+version+'.'+patch);
 		mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		mainWindow.setSize(800, 600);
-		//mainWindow.pack();
+		//mainWindow.setSize(800, 600);
+		mainWindow.pack();
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setVisible(true);
 
