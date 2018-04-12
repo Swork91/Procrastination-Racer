@@ -8,11 +8,13 @@ import javax.swing.*;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 7; 
+static final private int patch = 8; 
 /*************************** Patch Notes *********************************
- * The lap counter now works. Extra bonus: you can't cheat it.
- * You can still cheat it, but not as easily anyway. 
- * The important part is that it counter up when you do a lap and thats cool.
+ * 0.8 will restrict movement to the void zone in the center. 
+ * To do this I need to make a bad zone and an escape zone around it.
+ * Basically you restrict all movement in the bad zone.
+ * Then you restrict the down movement in the top part of the zone.
+ * And you do this by increasing the zone by 'speed' for the top or w/e
  ************************************************************************/
 private RaceTrack raceTrack = new RaceTrack();
 private RaceInfoHUD hud = new RaceInfoHUD();
@@ -44,8 +46,8 @@ public MainLauncher() {
 	    private Image carImage = new ImageIcon("images\\car1.png").getImage();
 
 		private int carXPos = 300;
-		private int carYPos = 550;
-		private int speed = 50;//don't go too fast or you'll clip through stuff
+		private int carYPos = 560;
+		private int speed = 20;//don't go too fast or you'll clip through stuff
 		
 		boolean checkpoint = false;
 		
@@ -54,28 +56,28 @@ public MainLauncher() {
 				public void keyPressed(KeyEvent e) {
 					switch (e.getKeyCode()) {
 					case KeyEvent.VK_DOWN: 
-						if (carYPos>=900) {
+						if (carYPos>=900 || (carXPos>=580 && carXPos<=1100 && carYPos>=280 && carYPos<=640)) {
 							break;
 						}
 						else {
 							carYPos+=speed; break;
 						}
 					case KeyEvent.VK_UP: 
-						if (carYPos<=50) {
+						if (carYPos<=50 || (carXPos>=580 && carXPos<=1100 && carYPos>=300 && carYPos<=660)) {
 							break;
 						}
 						else {
 							carYPos-=speed; break;
 						}
 					case KeyEvent.VK_LEFT: 
-						if (carXPos<=50) {
+						if (carXPos<=50 || (carXPos>=580 && carXPos<=1120 && carYPos>=300 && carYPos<=640)) {
 							break;
 						}
 						else {
 							carXPos-=speed; break;
 						}
 					case KeyEvent.VK_RIGHT: 
-						if (carXPos>=1650) {
+						if (carXPos>=1650|| (carXPos>=560 && carXPos<=1100 && carYPos>=300 && carYPos<=640)) {
 							break;
 						}
 						else {
@@ -100,10 +102,11 @@ public MainLauncher() {
 	        g.drawImage(raceTrackImage, 0, 0, getWidth(), getHeight(), this); //background
 	        
 	        g.setColor(Color.GREEN);
-	        g.fillOval(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
+	        g.fillRect(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
 	        
 	        g.setColor(Color.BLUE);
-	        g.fillOval(getWidth()/4, getHeight()/4, getWidth()/8, getHeight()/8); //puddle?
+	        g.fillOval(getWidth()/8, getHeight()/8, getWidth()/8, getHeight()/8); //puddle?
+	        g.fillOval(getWidth()*3/4, getHeight()/2, getWidth()/8, getHeight()/8); //puddle?
 	        
 	        g.setColor(Color.YELLOW);
 	        g.drawLine(0, getHeight()/2, getWidth()/2, getHeight()/2); //start
