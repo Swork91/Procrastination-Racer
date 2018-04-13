@@ -8,17 +8,20 @@ import javax.swing.*;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 8; 
+static final private int patch = 9; 
 /*************************** Patch Notes *********************************
- * 0.8 will restrict movement to the void zone in the center. 
- * To do this I need to make a bad zone and an escape zone around it.
- * Basically you restrict all movement in the bad zone.
- * Then you restrict the down movement in the top part of the zone.
- * And you do this by increasing the zone by 'speed' for the top or w/e
+ * 0.9 slightly changed the zones for the checkpoint system to be more accurate.
+ * It is still possible to cheat the lap system easily, but its only 1st agile iteration.
+ * 
+ * I also finally added the win condition and a rewarding message screen.
+ * The message is great and I don't think I will ever change it. 
+ *  
+ * (Secret cheats are now available too for cheaters like me)
  ************************************************************************/
 private RaceTrack raceTrack = new RaceTrack();
 private RaceInfoHUD hud = new RaceInfoHUD();
 static int lapNumber = 0;
+static int winLaps = 5;
 
 public MainLauncher() {
 	add(raceTrack, BorderLayout.CENTER);
@@ -44,10 +47,12 @@ public MainLauncher() {
 	private static class RaceTrack extends JPanel {
 		private Image raceTrackImage = new ImageIcon("images\\raceTrackBG1.png").getImage();
 	    private Image carImage = new ImageIcon("images\\car1.png").getImage();
-
+	    
 		private int carXPos = 300;
 		private int carYPos = 560;
 		private int speed = 20;//don't go too fast or you'll clip through stuff
+		private int carWidth = 100;
+		private int carLength = 100;
 		
 		boolean checkpoint = false;
 		
@@ -83,12 +88,16 @@ public MainLauncher() {
 						else {
 							carXPos+=speed; break;
 						}
+					//cheat
+					case KeyEvent.VK_C:
+						speed=100;
 					}
 					repaint();
-					if (carXPos>=1100 && carYPos>=550) {
+					//lap checkpoint system:
+					if ((carXPos>=1100 && carYPos>=400) && (carXPos<=getWidth() && carYPos<=getHeight()/2)) {
 						checkpoint = true;
 					}
-					if ((carXPos<=600 && carYPos<=550) && checkpoint) {
+					if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=680 && carYPos<=getHeight()/2) && checkpoint) {
 						lapNumber++;
 						checkpoint = false;
 					}
@@ -111,7 +120,28 @@ public MainLauncher() {
 	        g.setColor(Color.YELLOW);
 	        g.drawLine(0, getHeight()/2, getWidth()/2, getHeight()/2); //start
 	        
-	        g.drawImage(carImage, carXPos, carYPos, 100, 100, this); //car
+	        //check for win and display win screen
+	        if (winLaps>lapNumber) {
+	        	g.drawImage(carImage, carXPos, carYPos, carWidth, carLength, this); //car
+	        }
+	        else {
+	        	g.setColor(Color.ORANGE);
+	        	g.fillRoundRect(getWidth()/4, getHeight()/4, getWidth()/2, getHeight()/2, getWidth()/3, getHeight()/3);
+	        	
+	        	g.setColor(Color.WHITE);
+	        	//g.drawLine(getWidth()/2, getHeight()/2, getWidth()/2, getHeight()/2);
+	        	g.drawLine(getWidth()/2-20-200, getHeight()/2-100, getWidth()/2-200, getHeight()/2);
+	        	g.drawLine(getWidth()/2+20-200, getHeight()/2-100, getWidth()/2-200, getHeight()/2);
+	        	g.drawLine(getWidth()/2-20-200+40, getHeight()/2-100, getWidth()/2-200+40, getHeight()/2);
+	        	g.drawLine(getWidth()/2+20-200+40, getHeight()/2-100, getWidth()/2-200+40, getHeight()/2);
+	        	
+	        	g.drawLine(getWidth()/2, getHeight()/2-50, getWidth()/2, getHeight()/2+50);
+	        	
+	        	g.drawLine(getWidth()/2+200, getHeight()/2+100-50, getWidth()/2+200, getHeight()/2+100+50);
+	        	g.drawLine(getWidth()/2+200+50, getHeight()/2+100-50, getWidth()/2+200, getHeight()/2+100+50);
+	        	g.drawLine(getWidth()/2+200+50, getHeight()/2+100-50, getWidth()/2+200+50, getHeight()/2+100+50);
+	        }
+	        
 		}
 	}
 	/***********************************************************************************
