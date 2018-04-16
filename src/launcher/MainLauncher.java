@@ -8,25 +8,27 @@ import javax.swing.*;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 9; 
+static final private int patch = 10; 
 /*************************** Patch Notes *********************************
- * 0.9 slightly changed the zones for the checkpoint system to be more accurate.
- * It is still possible to cheat the lap system easily, but its only 1st agile iteration.
- * 
- * I also finally added the win condition and a rewarding message screen.
- * The message is great and I don't think I will ever change it. 
- *  
- * (Secret cheats are now available too for cheaters like me)
+ * 0.10 
+ * Added a lapTime variable to track the time it took to complete a lap
+ * It still needs logic to show each laps time, right now it shows the current time
+ * when each lap is completed. 
+ * It kind of works as a way to show how long it took to complete the whole
+ * race right now though. So thats something. 
+ * Still need to format the timer text with a leading zero for looks.
  ************************************************************************/
 private RaceTrack raceTrack = new RaceTrack();
 private RaceInfoHUD hud = new RaceInfoHUD();
 static int lapNumber = 0;
 static int winLaps = 5;
+static String currentTimerTime = "";
+static String lapTime = "0";
 
 public MainLauncher() {
 	add(raceTrack, BorderLayout.CENTER);
 	add(hud, BorderLayout.EAST);
-	hud.setLayout(new GridLayout(3,0));	
+	hud.setLayout(new GridLayout(4,0));	
 	raceTrack.setFocusable(true);
 }
 
@@ -93,13 +95,17 @@ public MainLauncher() {
 						speed=100;
 					}
 					repaint();
-					//lap checkpoint system:
+					/* lap checkpoint system:
+					 * should keep track if the car actually makes a loop around the track 
+					 * this prevents players from just going backwards and cheating laps
+					 */
 					if ((carXPos>=1100 && carYPos>=400) && (carXPos<=getWidth() && carYPos<=getHeight()/2)) {
 						checkpoint = true;
 					}
 					if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=680 && carYPos<=getHeight()/2) && checkpoint) {
 						lapNumber++;
 						checkpoint = false;
+						lapTime = currentTimerTime;
 					}
 					System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint);
 				}
@@ -150,6 +156,8 @@ public MainLauncher() {
 	public class RaceInfoHUD extends JPanel {
 		JLabel seconds = new JLabel();
 		JLabel lap = new JLabel();
+		JLabel lapRecord = new JLabel();
+		int pork = 0;
 		public RaceInfoHUD() {
 			Timer timer = new Timer(1, new TimerListener());
 			timer.start();
@@ -157,21 +165,26 @@ public MainLauncher() {
 			add(new JLabel("Procrastination RACER"));
 			add(seconds);
 			add(lap);
+			add(lapRecord);
 		}
 		
 		class TimerListener implements ActionListener{
 			private int timeMiliSeconds = 0;
 			public void actionPerformed(ActionEvent e) {
-				seconds.setText((timeMiliSeconds/1000)/60+":"+(timeMiliSeconds/1000)%60+"."+(timeMiliSeconds++%1000));
+				// TODO String.format this text to not look terrible.
+				currentTimerTime = (timeMiliSeconds/1000)/60+":"+(timeMiliSeconds/1000)%60+"."+(timeMiliSeconds++%1000);
+				
+				seconds.setText(currentTimerTime);
 				lap.setText("Lap: "+lapNumber);
+				lapRecord.setText(lapTime);
 			}
 		}
 		
-		protected void paintComponent(Graphics g) {
+		/*protected void paintComponent(Graphics g) { // what is this for??
 			super.paintComponent(g);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 24));
 			g.setColor(Color.WHITE);
 			g.fillRect(0, 0, 200, 1);
-		}
+		}*/
 	}
 }
