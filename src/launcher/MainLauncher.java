@@ -8,22 +8,24 @@ import javax.swing.*;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 10; 
+static final private int patch = 11; 
 /*************************** Patch Notes *********************************
- * 0.10 
- * Added a lapTime variable to track the time it took to complete a lap
- * It still needs logic to show each laps time, right now it shows the current time
- * when each lap is completed. 
- * It kind of works as a way to show how long it took to complete the whole
- * race right now though. So thats something. 
- * Still need to format the timer text with a leading zero for looks.
+ * 0.11
+ * minor improvements to code readability. 
+ * added a display for the lap times that shows the time for each lap.
+ * I had to use HTML for it, but its fine. It works. 
+ * Also I have double the amount of global variables I started with. 
+ * So I guess I'm working on making my first god class. 
  ************************************************************************/
 private RaceTrack raceTrack = new RaceTrack();
 private RaceInfoHUD hud = new RaceInfoHUD();
 static int lapNumber = 0;
 static int winLaps = 5;
-static String currentTimerTime = "";
-static String lapTime = "0";
+
+private static int timeMiliSeconds = 0;
+
+static String lapTimes = "Lap Times!";
+static final String gameTitle = "Procrastination RACER";
 
 public MainLauncher() {
 	add(raceTrack, BorderLayout.CENTER);
@@ -34,7 +36,7 @@ public MainLauncher() {
 
 	public static void main(String[] args) {
 		MainLauncher mainWindow = new MainLauncher();
-		mainWindow.setTitle("Procrastination Racer "+version+'.'+patch);
+		mainWindow.setTitle(gameTitle+" - "+version+'.'+patch);
 		mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		mainWindow.setSize(1920, 1080);
 		//mainWindow.pack();
@@ -56,7 +58,15 @@ public MainLauncher() {
 		private int carWidth = 100;
 		private int carLength = 100;
 		
-		boolean checkpoint = false;
+		private boolean checkpoint = false;
+		
+		private String lap1 = "error";
+		private String lap2 = "error";
+		private String lap3 = "error";
+		private String lap4 = "error";
+		private String lap5 = "error";
+		
+		private int previousMiliseconds, tempTime;
 		
 		public RaceTrack() {
 			addKeyListener(new KeyAdapter() {
@@ -105,26 +115,66 @@ public MainLauncher() {
 					if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=680 && carYPos<=getHeight()/2) && checkpoint) {
 						lapNumber++;
 						checkpoint = false;
-						lapTime = currentTimerTime;
+						switch (lapNumber) {
+							case 1:
+								previousMiliseconds = timeMiliSeconds;
+								lap1 = ((timeMiliSeconds/1000/60) + ":" + (timeMiliSeconds/1000%60) + "." + (timeMiliSeconds%1000));
+								lapTimes = lap1;
+								break;
+							case 2:
+								tempTime = timeMiliSeconds - previousMiliseconds;
+								previousMiliseconds = timeMiliSeconds;
+								lap2 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "</html>";
+								break;
+							case 3:
+								tempTime = timeMiliSeconds - previousMiliseconds;
+								previousMiliseconds = timeMiliSeconds;
+								lap3 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "</html>";
+								break;
+							case 4:
+								tempTime = timeMiliSeconds - previousMiliseconds;
+								previousMiliseconds = timeMiliSeconds;
+								lap4 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "</html>";
+								break;
+							case 5:
+								tempTime = timeMiliSeconds - previousMiliseconds;
+								previousMiliseconds = timeMiliSeconds;
+								lap5 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "<br>" + lap5 + "</html>";
+								break;
+						}
+						
 					}
 					System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint);
 				}
 			});
 		}
-		
+		/******************************************************************
+		 * Creates the graphics for the raceTrack frame.
+		 * includes:
+		 * 	track asphalt 
+		 * 	green void zone in center
+		 * 	finish/starting line
+		 * 	danger puddles
+		 * 	The Race Car
+		 * 	Win Screen
+		 ******************************************************************/
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);		
 	        g.drawImage(raceTrackImage, 0, 0, getWidth(), getHeight(), this); //background
 	        
 	        g.setColor(Color.GREEN);
 	        g.fillRect(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
-	        
+	        //TODO puddles move and slow car down. 
 	        g.setColor(Color.BLUE);
 	        g.fillOval(getWidth()/8, getHeight()/8, getWidth()/8, getHeight()/8); //puddle?
 	        g.fillOval(getWidth()*3/4, getHeight()/2, getWidth()/8, getHeight()/8); //puddle?
 	        
 	        g.setColor(Color.YELLOW);
-	        g.drawLine(0, getHeight()/2, getWidth()/2, getHeight()/2); //start
+	        g.fillRect(0, getHeight()/2, getWidth()/2-getWidth()/8, getHeight()/64); //start
 	        
 	        //check for win and display win screen
 	        if (winLaps>lapNumber) {
@@ -135,14 +185,14 @@ public MainLauncher() {
 	        	g.fillRoundRect(getWidth()/4, getHeight()/4, getWidth()/2, getHeight()/2, getWidth()/3, getHeight()/3);
 	        	
 	        	g.setColor(Color.WHITE);
-	        	//g.drawLine(getWidth()/2, getHeight()/2, getWidth()/2, getHeight()/2);
+	        	// W
 	        	g.drawLine(getWidth()/2-20-200, getHeight()/2-100, getWidth()/2-200, getHeight()/2);
 	        	g.drawLine(getWidth()/2+20-200, getHeight()/2-100, getWidth()/2-200, getHeight()/2);
 	        	g.drawLine(getWidth()/2-20-200+40, getHeight()/2-100, getWidth()/2-200+40, getHeight()/2);
 	        	g.drawLine(getWidth()/2+20-200+40, getHeight()/2-100, getWidth()/2-200+40, getHeight()/2);
-	        	
+	        	// I
 	        	g.drawLine(getWidth()/2, getHeight()/2-50, getWidth()/2, getHeight()/2+50);
-	        	
+	        	// N
 	        	g.drawLine(getWidth()/2+200, getHeight()/2+100-50, getWidth()/2+200, getHeight()/2+100+50);
 	        	g.drawLine(getWidth()/2+200+50, getHeight()/2+100-50, getWidth()/2+200, getHeight()/2+100+50);
 	        	g.drawLine(getWidth()/2+200+50, getHeight()/2+100-50, getWidth()/2+200+50, getHeight()/2+100+50);
@@ -154,37 +204,30 @@ public MainLauncher() {
 	* Panel for showing the time since the race started and the number of laps completed. 
 	************************************************************************************/
 	public class RaceInfoHUD extends JPanel {
-		JLabel seconds = new JLabel();
-		JLabel lap = new JLabel();
-		JLabel lapRecord = new JLabel();
-		int pork = 0;
+		JLabel seconds = new JLabel("", SwingConstants.CENTER);
+		JLabel lap = new JLabel("", SwingConstants.CENTER);
+		JLabel lapRecord = new JLabel("", SwingConstants.CENTER);
+		
 		public RaceInfoHUD() {
 			Timer timer = new Timer(1, new TimerListener());
 			timer.start();
 			
-			add(new JLabel("Procrastination RACER"));
+			add(new JLabel(gameTitle));
 			add(seconds);
 			add(lap);
 			add(lapRecord);
 		}
 		
 		class TimerListener implements ActionListener{
-			private int timeMiliSeconds = 0;
 			public void actionPerformed(ActionEvent e) {
 				// TODO String.format this text to not look terrible.
-				currentTimerTime = (timeMiliSeconds/1000)/60+":"+(timeMiliSeconds/1000)%60+"."+(timeMiliSeconds++%1000);
+				if (lapNumber != winLaps)
+					timeMiliSeconds++; //TODO stop the timer, not just my counter. 
 				
-				seconds.setText(currentTimerTime);
+				seconds.setText((timeMiliSeconds/1000/60) + ":" + (timeMiliSeconds/1000%60) + "." + (timeMiliSeconds%1000));
 				lap.setText("Lap: "+lapNumber);
-				lapRecord.setText(lapTime);
+				lapRecord.setText(lapTimes);
 			}
 		}
-		
-		/*protected void paintComponent(Graphics g) { // what is this for??
-			super.paintComponent(g);
-			g.setFont(new Font("TimesRoman", Font.PLAIN, 24));
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, 200, 1);
-		}*/
 	}
 }
