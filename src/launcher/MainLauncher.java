@@ -4,18 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+
 import javax.swing.*;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 11; 
+static final private int patch = 12; 
 /*************************** Patch Notes *********************************
- * 0.11
- * minor improvements to code readability. 
- * added a display for the lap times that shows the time for each lap.
- * I had to use HTML for it, but its fine. It works. 
- * Also I have double the amount of global variables I started with. 
- * So I guess I'm working on making my first god class. 
+ * 0.12
+ * added in better tracking of lap times.
+ * Added ability to save race times and best lap times. 
+ * New display on bottom to show highscores/records. 
+ * finally changed the display to have a leading zero... and thought of
+ * 	a way to cheese it. 
  ************************************************************************/
 private RaceTrack raceTrack = new RaceTrack();
 private RaceInfoHUD hud = new RaceInfoHUD();
@@ -23,6 +26,7 @@ static int lapNumber = 0;
 static int winLaps = 5;
 
 private static int timeMiliSeconds = 0;
+static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
 
 static String lapTimes = "Lap Times!";
 static final String gameTitle = "Procrastination RACER";
@@ -30,11 +34,11 @@ static final String gameTitle = "Procrastination RACER";
 public MainLauncher() {
 	add(raceTrack, BorderLayout.CENTER);
 	add(hud, BorderLayout.EAST);
-	hud.setLayout(new GridLayout(4,0));	
+	hud.setLayout(new GridLayout(5,0));	
 	raceTrack.setFocusable(true);
 }
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		MainLauncher mainWindow = new MainLauncher();
 		mainWindow.setTitle(gameTitle+" - "+version+'.'+patch);
 		mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -44,6 +48,7 @@ public MainLauncher() {
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setVisible(true);
 		
+		SaveLoadDataStream.verifyLoadFile("racer.dat");
 	}
 	/***************************************************************
 	 * Panel for the race track and the car object driving over it
@@ -60,13 +65,12 @@ public MainLauncher() {
 		
 		private boolean checkpoint = false;
 		
-		private String lap1 = "error";
-		private String lap2 = "error";
-		private String lap3 = "error";
-		private String lap4 = "error";
-		private String lap5 = "error";
-		
-		private int previousMiliseconds, tempTime;
+		private static String lap1 = "error";
+		private static String lap2 = "error";
+		private static String lap3 = "error";
+		private static String lap4 = "error";
+		private static String lap5 = "error";
+		private int lap1Time, lap2Time, lap3Time, lap4Time, lap5Time;
 		
 		public RaceTrack() {
 			addKeyListener(new KeyAdapter() {
@@ -115,39 +119,65 @@ public MainLauncher() {
 					if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=680 && carYPos<=getHeight()/2) && checkpoint) {
 						lapNumber++;
 						checkpoint = false;
+						//calculates time for each lap and write it to the lapTimes string. 
 						switch (lapNumber) {
 							case 1:
-								previousMiliseconds = timeMiliSeconds;
-								lap1 = ((timeMiliSeconds/1000/60) + ":" + (timeMiliSeconds/1000%60) + "." + (timeMiliSeconds%1000));
+								lap1Time = timeMiliSeconds;
+								lap1 = formatter.format(lap1Time);
 								lapTimes = lap1;
+								//new record
+								if (lap1Time<SaveLoadDataStream.getBestLapTime()) {
+									SaveLoadDataStream.setBestLapTime(lap1Time);
+								}
 								break;
 							case 2:
-								tempTime = timeMiliSeconds - previousMiliseconds;
-								previousMiliseconds = timeMiliSeconds;
-								lap2 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lap2Time = timeMiliSeconds - lap1Time;
+								lap2 = formatter.format(lap2Time);
 								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "</html>";
+								if (lap2Time<SaveLoadDataStream.getBestLapTime()) {
+									SaveLoadDataStream.setBestLapTime(lap2Time);
+								}
 								break;
 							case 3:
-								tempTime = timeMiliSeconds - previousMiliseconds;
-								previousMiliseconds = timeMiliSeconds;
-								lap3 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lap3Time = timeMiliSeconds - (lap2Time + lap1Time);
+								lap3 = formatter.format(lap3Time);
 								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "</html>";
+								if (lap3Time<SaveLoadDataStream.getBestLapTime()) {
+									SaveLoadDataStream.setBestLapTime(lap3Time);
+								}
 								break;
 							case 4:
-								tempTime = timeMiliSeconds - previousMiliseconds;
-								previousMiliseconds = timeMiliSeconds;
-								lap4 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lap4Time = timeMiliSeconds - (lap3Time + lap2Time + lap1Time);
+								lap4 = formatter.format(lap4Time);
 								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "</html>";
+								if (lap4Time<SaveLoadDataStream.getBestLapTime()) {
+									SaveLoadDataStream.setBestLapTime(lap4Time);
+								}
 								break;
 							case 5:
-								tempTime = timeMiliSeconds - previousMiliseconds;
-								previousMiliseconds = timeMiliSeconds;
-								lap5 = ((tempTime/1000/60) + ":" + (tempTime/1000%60) + "." + (tempTime%1000));
+								lap5Time = timeMiliSeconds - (lap4Time + lap3Time + lap2Time + lap1Time);
+								lap5 = formatter.format(lap5Time);
 								lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "<br>" + lap5 + "</html>";
+								
+								if (lap5Time<SaveLoadDataStream.getBestLapTime()) {
+									SaveLoadDataStream.setBestLapTime(lap5Time);
+								}
+								//new record for total time
+								if (timeMiliSeconds<SaveLoadDataStream.getBestTotalTime()) {
+									SaveLoadDataStream.setBestTotalTime(timeMiliSeconds);
+								}
+								//save any new records.
+								try {
+									SaveLoadDataStream.save("racer.dat");
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 								break;
 						}
 						
 					}
+					//TODO delete me when done debugging
 					System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint);
 				}
 			});
@@ -180,7 +210,7 @@ public MainLauncher() {
 	        if (winLaps>lapNumber) {
 	        	g.drawImage(carImage, carXPos, carYPos, carWidth, carLength, this); //car
 	        }
-	        else {
+	        else { //you WIN
 	        	g.setColor(Color.ORANGE);
 	        	g.fillRoundRect(getWidth()/4, getHeight()/4, getWidth()/2, getHeight()/2, getWidth()/3, getHeight()/3);
 	        	
@@ -207,6 +237,7 @@ public MainLauncher() {
 		JLabel seconds = new JLabel("", SwingConstants.CENTER);
 		JLabel lap = new JLabel("", SwingConstants.CENTER);
 		JLabel lapRecord = new JLabel("", SwingConstants.CENTER);
+		JLabel bestRecods = new JLabel("", SwingConstants.CENTER);
 		
 		public RaceInfoHUD() {
 			Timer timer = new Timer(1, new TimerListener());
@@ -216,6 +247,7 @@ public MainLauncher() {
 			add(seconds);
 			add(lap);
 			add(lapRecord);
+			add(bestRecods);
 		}
 		
 		class TimerListener implements ActionListener{
@@ -224,9 +256,15 @@ public MainLauncher() {
 				if (lapNumber != winLaps)
 					timeMiliSeconds++; //TODO stop the timer, not just my counter. 
 				
-				seconds.setText((timeMiliSeconds/1000/60) + ":" + (timeMiliSeconds/1000%60) + "." + (timeMiliSeconds%1000));
+				String result = formatter.format(timeMiliSeconds);
+				seconds.setText(result);
+
 				lap.setText("Lap: "+lapNumber);
 				lapRecord.setText(lapTimes);
+				
+				String srecordBestTotalTime = formatter.format(SaveLoadDataStream.getBestTotalTime());
+				String srecordBestLapTime = formatter.format(SaveLoadDataStream.getBestLapTime());
+				bestRecods.setText("<html> Best Time: " + srecordBestTotalTime + "<br>Best Lap: " + srecordBestLapTime + "</html>");
 			}
 		}
 	}
