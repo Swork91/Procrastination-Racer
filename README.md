@@ -11,8 +11,9 @@ Final project showing java knowledge by making a race car game. Done by splittin
 ### Sprint 2 Plan
 * Lap times recorded
 * Lap times saved to high score.
+* Can load high score data.
 * Obstacles in road to avoid.
-* Can load high score data. 
+* Game timer starts when player is ready. (3, 2, 1, GO!)
 
 ### Sprint 3 Plan(final):
 * Car feel like an actual car (not a block shuffling around).
