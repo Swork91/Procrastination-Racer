@@ -3,6 +3,7 @@ package hud;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -26,12 +27,16 @@ public class RaceInfoHUD extends JPanel {
 	
 	private static int timeMiliSeconds = 0;
 	private static int winLaps = 5;
+	private static int randomX = ThreadLocalRandom.current().nextInt(0, 1650);
+	private static int randomY = ThreadLocalRandom.current().nextInt(0, 900);
 	static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
+	private String srecordBestTotalTime = formatter.format(SaveLoadDataStream.getBestTotalTime());
+	private String srecordBestLapTime = formatter.format(SaveLoadDataStream.getBestLapTime());
 	
 	public RaceInfoHUD() {
 		Timer timer = new Timer(1, new TimerListener());
 		timer.start();
-
+		
 		add(new JLabel("Procrastination RACER"));
 		add(seconds);
 		add(lap);
@@ -43,19 +48,27 @@ public class RaceInfoHUD extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if (RaceTrack.getLapNumber() != winLaps)
 				timeMiliSeconds++; //TODO stop the timer, not just my counter. Does 'timer.stop();' work?
-			
+			if (timeMiliSeconds%5000==0) {
+		    	randomX = ThreadLocalRandom.current().nextInt(0, 1650);
+		    	randomY = ThreadLocalRandom.current().nextInt(0, 900);
+			}
 			String result = formatter.format(timeMiliSeconds);
 			seconds.setText(result);
 			lap.setText("Lap: "+RaceTrack.getLapNumber());
 			lapRecord.setText(RaceTrack.getLapTimes());
-			
-			String srecordBestTotalTime = formatter.format(SaveLoadDataStream.getBestTotalTime());
-			String srecordBestLapTime = formatter.format(SaveLoadDataStream.getBestLapTime());
 			bestRecods.setText("<html> Best Time: " + srecordBestTotalTime + "<br>Best Lap: " + srecordBestLapTime + "</html>");
 		}
 	}
 	
 	public static int getTimeMiliSeconds() {
 		return timeMiliSeconds;
+	}
+	
+	public static int getRandomXCoord() {
+		return randomX;
+	}
+	
+	public static int getRandomYCoord() {
+		return randomY;
 	}
 }

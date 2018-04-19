@@ -9,14 +9,10 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 13; 
+static final private int patch = 14; 
 /*************************** Patch Notes *********************************
- * 0.13 - backend changes
- * Added more+better documentation and created separate classes to
- * help make this readable because 
- * WOOOOOOOOOOOOOOW
- * it was getting bad
- * Now maybe someone else could read it and not have an aneurysm
+ * 0.14 - 
+
  ************************************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();

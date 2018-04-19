@@ -50,32 +50,58 @@ public class RaceTrack extends JPanel {
 						break;
 					}
 					else {
-						carYPos+=speed; break;
+						carYPos+=speed;
+						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
+							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
+							speed = -20; //hit puddle consequence REVERSE CONTROLS
+							break;
+						}
+						break;
 					}
+
 				case KeyEvent.VK_UP: 
 					if (carYPos<=50 || (carXPos>=580 && carXPos<=1100 && carYPos>=300 && carYPos<=660)) {
 						break;
 					}
 					else {
-						carYPos-=speed; break;
+						carYPos-=speed;
+						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
+							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
+							speed = -20; //hit puddle consequence REVERSE CONTROLS
+							break;
+						}
+						break;
 					}
 				case KeyEvent.VK_LEFT: 
 					if (carXPos<=50 || (carXPos>=580 && carXPos<=1120 && carYPos>=300 && carYPos<=640)) {
 						break;
 					}
 					else {
-						carXPos-=speed; break;
+						carXPos-=speed; 
+						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
+							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
+							speed = -20; //hit puddle consequence REVERSE CONTROLS
+							break;
+						}
+						break;
 					}
 				case KeyEvent.VK_RIGHT: 
-					if (carXPos>=1650|| (carXPos>=560 && carXPos<=1100 && carYPos>=300 && carYPos<=640)) {
+					if (carXPos>=1650 || (carXPos>=560 && carXPos<=1100 && carYPos>=300 && carYPos<=640)) {
 						break;
 					}
 					else {
-						carXPos+=speed; break;
+						carXPos+=speed;						
+						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
+							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
+							speed = -20; //hit puddle consequence REVERSE CONTROLS
+							break;
+						}
+						break;
 					}
 				//cheat
 				case KeyEvent.VK_C:
 					speed=100;
+					lapNumber=0;
 				}
 				repaint();
 				/* lap checkpoint system:
@@ -146,7 +172,8 @@ public class RaceTrack extends JPanel {
 					
 				}
 				//TODO delete me when done debugging
-				System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint);
+				//System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint+"\n"+"speed: "+speed);
+				System.out.println("xar xpos: "+carXPos+"\ncar ypos: "+carYPos+"\nbad x"+": "+RaceInfoHUD.getRandomXCoord()+"\n"+"bad y: "+RaceInfoHUD.getRandomYCoord()+"\n"+"speed: "+speed);
 			}
 		});
 	}
@@ -166,11 +193,11 @@ public class RaceTrack extends JPanel {
         
         g.setColor(Color.GREEN);
         g.fillRect(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
-        //TODO puddles move and slow car down. 
-        g.setColor(Color.BLUE);
-        g.fillOval(getWidth()/8, getHeight()/8, getWidth()/8, getHeight()/8); //puddle?
-        g.fillOval(getWidth()*3/4, getHeight()/2, getWidth()/8, getHeight()/8); //puddle?
         
+        //TODO PUDDLES. Its puddle time.
+        g.setColor(Color.BLUE);
+        g.fillOval(RaceInfoHUD.getRandomXCoord(), RaceInfoHUD.getRandomYCoord(), getWidth()/8, getHeight()/8); //puddle?
+
         g.setColor(Color.YELLOW);
         g.fillRect(0, getHeight()/2, getWidth()/2-getWidth()/8, getHeight()/64); //start
         
