@@ -17,6 +17,7 @@ Final project showing java knowledge by making a race car game. Done by splittin
 
 ### Sprint 3 Plan(final):
 * Car feel like an actual car (not a block shuffling around).
+* Fix layout. (GridBagLayoutDemo or BoxLayout)
 * Handles checked exceptions. 
 * Clean (readable) code
 * Lambda Expressions?????
