@@ -23,26 +23,26 @@ public class SaveLoadDataStream {
 	}
 	
 	//you can't save without loading or else your records get DELETED
-	static void save(String fileName) throws IOException {
+	public static void save(String fileName) throws IOException {
 		DataOutputStream output = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(fileName)));
 		output.writeInt(bestTotal);
 		output.writeInt(bestLap);
 		output.close();
 	}
 	
-	static int getBestTotalTime() {
+	public static int getBestTotalTime() {
 		return bestTotal;
 	}
 	
-	static int getBestLapTime() {
+	public static int getBestLapTime() {
 		return bestLap;
 	}
 	
-	static void setBestTotalTime(int btt) {
+	public static void setBestTotalTime(int btt) {
 		bestTotal = btt;
 	}
 	
-	static void setBestLapTime(int blt) {
+	public static void setBestLapTime(int blt) {
 		bestLap = blt;
 	}
 }
