@@ -25,7 +25,7 @@ public class RaceInfoHUD extends JPanel {
 	JLabel lapRecord = new JLabel("", SwingConstants.CENTER);
 	JLabel bestRecods = new JLabel("", SwingConstants.CENTER);
 	
-	private static int timeMiliSeconds = 0;
+	private static int timeMiliSeconds = -1;
 	private static int winLaps = 5;
 	private static int randomX = ThreadLocalRandom.current().nextInt(0, 1650);
 	private static int randomY = ThreadLocalRandom.current().nextInt(0, 900);
@@ -46,7 +46,7 @@ public class RaceInfoHUD extends JPanel {
 	
 	class TimerListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			if (RaceTrack.getLapNumber() != winLaps)
+			if (RaceTrack.getLapNumber() != winLaps && timeMiliSeconds>=0)
 				timeMiliSeconds++; //TODO stop the timer, not just my counter. Does 'timer.stop();' work?
 			if (timeMiliSeconds%5000==0) {
 		    	randomX = ThreadLocalRandom.current().nextInt(0, 1650);
@@ -62,6 +62,10 @@ public class RaceInfoHUD extends JPanel {
 	
 	public static int getTimeMiliSeconds() {
 		return timeMiliSeconds;
+	}
+	
+	public static void setTimeMiliSeconds(int newTimeMiliSeconds) {
+		timeMiliSeconds = newTimeMiliSeconds;
 	}
 	
 	public static int getRandomXCoord() {

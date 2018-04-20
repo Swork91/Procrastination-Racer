@@ -29,6 +29,7 @@ public class RaceTrack extends JPanel {
 	private int carLength = 100;
 	
 	private boolean checkpoint = false;
+	private boolean didGameStart = false;
 	
 	private static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
 	private static String lapTimes = "Lap Times!";
@@ -45,7 +46,10 @@ public class RaceTrack extends JPanel {
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
-				case (KeyEvent.VK_DOWN): 
+				case (KeyEvent.VK_DOWN):
+					if (didGameStart == false) {
+						gameStart();
+					}
 					if (carYPos>=900 || (carXPos>=580 && carXPos<=1100 && carYPos>=280 && carYPos<=640)) {
 						break;
 					}
@@ -60,6 +64,9 @@ public class RaceTrack extends JPanel {
 					}
 
 				case KeyEvent.VK_UP: 
+					if (didGameStart == false) {
+						gameStart();
+					}
 					if (carYPos<=50 || (carXPos>=580 && carXPos<=1100 && carYPos>=300 && carYPos<=660)) {
 						break;
 					}
@@ -73,6 +80,9 @@ public class RaceTrack extends JPanel {
 						break;
 					}
 				case KeyEvent.VK_LEFT: 
+					if (didGameStart == false) {
+						gameStart();
+					}
 					if (carXPos<=50 || (carXPos>=580 && carXPos<=1120 && carYPos>=300 && carYPos<=640)) {
 						break;
 					}
@@ -86,6 +96,9 @@ public class RaceTrack extends JPanel {
 						break;
 					}
 				case KeyEvent.VK_RIGHT: 
+					if (didGameStart == false) {
+						gameStart();
+					}
 					if (carXPos>=1650 || (carXPos>=560 && carXPos<=1100 && carYPos>=300 && carYPos<=640)) {
 						break;
 					}
@@ -231,5 +244,11 @@ public class RaceTrack extends JPanel {
 	
 	public static int getLapNumber() {
 		return lapNumber;
+	}
+	
+	//(re)sets the timer to zero
+	public void gameStart() {
+		didGameStart = true;
+		RaceInfoHUD.setTimeMiliSeconds(0);
 	}
 }

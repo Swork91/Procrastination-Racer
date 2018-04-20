@@ -9,10 +9,13 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 14; 
+static final private int patch = 15; 
 /*************************** Patch Notes *********************************
- * 0.14 - 
-
+ * 0.15 - Game timer doesn't start until the game starts. 
+ * 
+ *************************** Known Issues ********************************
+ * when car hits a puddle it will be able to clip into out of bounds.
+ * save broke. Game isn't being saved correctly.
  ************************************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();
