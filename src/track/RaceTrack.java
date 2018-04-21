@@ -117,10 +117,11 @@ public class RaceTrack extends JPanel {
 					lapNumber=0;
 				}
 				repaint();
-				/* lap checkpoint system:
+				/***********************************************************************
+				 *  lap checkpoint system:
 				 * should keep track if the car actually makes a loop around the track 
 				 * this prevents players from just going backwards and cheating laps
-				 */
+				 ************************************************************************/
 				if ((carXPos>=1100 && carYPos>=400) && (carXPos<=getWidth() && carYPos<=getHeight()/2)) {
 					checkpoint = true;
 				}
@@ -134,59 +135,42 @@ public class RaceTrack extends JPanel {
 							lap1 = formatter.format(lap1Time);
 							lapTimes = lap1;
 							//new record
-							if (lap1Time<SaveLoadDataStream.getBestLapTime()) {
-								SaveLoadDataStream.setBestLapTime(lap1Time);
-							}
+							checkSaveLapTime(lap1Time);
 							break;
 						case 2:
 							lap2Time = RaceInfoHUD.getTimeMiliSeconds() - lap1Time;
 							lap2 = formatter.format(lap2Time);
 							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "</html>";
-							if (lap2Time<SaveLoadDataStream.getBestLapTime()) {
-								SaveLoadDataStream.setBestLapTime(lap2Time);
-							}
+							checkSaveLapTime(lap2Time);
 							break;
 						case 3:
 							lap3Time = RaceInfoHUD.getTimeMiliSeconds() - (lap2Time + lap1Time);
 							lap3 = formatter.format(lap3Time);
 							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "</html>";
-							if (lap3Time<SaveLoadDataStream.getBestLapTime()) {
-								SaveLoadDataStream.setBestLapTime(lap3Time);
-							}
+							checkSaveLapTime(lap3Time);
 							break;
 						case 4:
 							lap4Time = RaceInfoHUD.getTimeMiliSeconds() - (lap3Time + lap2Time + lap1Time);
 							lap4 = formatter.format(lap4Time);
 							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "</html>";
-							if (lap4Time<SaveLoadDataStream.getBestLapTime()) {
-								SaveLoadDataStream.setBestLapTime(lap4Time);
-							}
+							checkSaveLapTime(lap4Time);
 							break;
 						case 5:
 							lap5Time = RaceInfoHUD.getTimeMiliSeconds() - (lap4Time + lap3Time + lap2Time + lap1Time);
 							lap5 = formatter.format(lap5Time);
 							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "<br>" + lap5 + "</html>";
-							
-							if (lap5Time<SaveLoadDataStream.getBestLapTime()) {
-								SaveLoadDataStream.setBestLapTime(lap5Time);
-							}
-							//new record for total time
-							if (RaceInfoHUD.getTimeMiliSeconds()<SaveLoadDataStream.getBestTotalTime()) {
-								SaveLoadDataStream.setBestTotalTime(RaceInfoHUD.getTimeMiliSeconds());
-							}
-							//save any new records.
-							try {
-								SaveLoadDataStream.save(MainLauncher.saveGameName);
-							} catch (IOException e1) {
-								e1.printStackTrace();
-							}
+							checkSaveLapTime(lap5Time);
+							checkSaveTotalTime();
+							autoSave();
 							break;
 					}
 					
 				}
-				//TODO delete me when done debugging
+				/* TODO delete me when done debugging 
+				 * that means all these system.out lines */
 				//System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint+"\n"+"speed: "+speed);
-				System.out.println("xar xpos: "+carXPos+"\ncar ypos: "+carYPos+"\nbad x"+": "+RaceInfoHUD.getRandomXCoord()+"\n"+"bad y: "+RaceInfoHUD.getRandomYCoord()+"\n"+"speed: "+speed);
+				System.out.println("best time: " + SaveLoadDataStream.getBestTotalTime() + "\nbest lap: " + SaveLoadDataStream.getBestLapTime());
+				//System.out.println("xar xpos: "+carXPos+"\ncar ypos: "+carYPos+"\nbad x"+": "+RaceInfoHUD.getRandomXCoord()+"\n"+"bad y: "+RaceInfoHUD.getRandomYCoord()+"\n"+"speed: "+speed);
 			}
 		});
 	}
@@ -250,5 +234,27 @@ public class RaceTrack extends JPanel {
 	public void gameStart() {
 		didGameStart = true;
 		RaceInfoHUD.setTimeMiliSeconds(0);
+	}
+	/** Checks if a LAP time is a record. Then temp-saves it and updates the HUD. */
+	public void checkSaveLapTime(int lapTime) {
+		if (lapTime < SaveLoadDataStream.getBestLapTime()) {
+			SaveLoadDataStream.setBestLapTime(lapTime);
+			RaceInfoHUD.setBestLapTime(lapTime);
+		}
+	}
+	/** Checks if the TOTAL time is a record. Then temp-saves it and updates the HUD. */
+	public void checkSaveTotalTime() {
+		if (RaceInfoHUD.getTimeMiliSeconds() < SaveLoadDataStream.getBestTotalTime()) {
+			SaveLoadDataStream.setBestTotalTime(RaceInfoHUD.getTimeMiliSeconds());
+			RaceInfoHUD.setBestTotalTime(RaceInfoHUD.getTimeMiliSeconds());
+		}
+	}
+	/** Auto Save (actually writes to data file) */
+	public void autoSave() {
+		try {
+			SaveLoadDataStream.save(MainLauncher.saveGameName);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 }

@@ -30,8 +30,8 @@ public class RaceInfoHUD extends JPanel {
 	private static int randomX = ThreadLocalRandom.current().nextInt(0, 1650);
 	private static int randomY = ThreadLocalRandom.current().nextInt(0, 900);
 	static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
-	private String srecordBestTotalTime = formatter.format(SaveLoadDataStream.getBestTotalTime());
-	private String srecordBestLapTime = formatter.format(SaveLoadDataStream.getBestLapTime());
+	private static String srecordBestTotalTime = formatter.format(SaveLoadDataStream.getBestTotalTime());
+	private static String srecordBestLapTime = formatter.format(SaveLoadDataStream.getBestLapTime());
 	
 	public RaceInfoHUD() {
 		Timer timer = new Timer(1, new TimerListener());
@@ -74,5 +74,21 @@ public class RaceInfoHUD extends JPanel {
 	
 	public static int getRandomYCoord() {
 		return randomY;
+	}
+	
+	public static String getBestTotalTime() {
+		return srecordBestTotalTime;
+	}
+	
+	public static void setBestTotalTime(int totalTime) {
+		srecordBestTotalTime = formatter.format(totalTime);
+	}
+	
+	public static String getBestLapTime() {
+		return srecordBestLapTime;
+	}
+	
+	public static void setBestLapTime(int lapTime) {
+		srecordBestLapTime = formatter.format(lapTime);
 	}
 }

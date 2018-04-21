@@ -9,13 +9,14 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 15; 
+static final private int patch = 16; 
 /*************************** Patch Notes *********************************
- * 0.15 - Game timer doesn't start until the game starts. 
- * 
+ * 0.16 - Bug fixing
+ * save game was actually working fine, but I wasn't displaying the saved
+ * scores correctly on the HUD. Updated the RaceTrack class to change the
+ * HUD correctly. Also I made it more readable and documented while there. 
  *************************** Known Issues ********************************
  * when car hits a puddle it will be able to clip into out of bounds.
- * save broke. Game isn't being saved correctly.
  ************************************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();
@@ -29,6 +30,9 @@ public MainLauncher() {
 }
 
 	public static void main(String[] args) throws IOException {
+		/** Make sure you load game data before initializing anything else */
+		SaveLoadDataStream.verifyLoadFile(saveGameName);
+		
 		MainLauncher mainWindow = new MainLauncher();
 		mainWindow.setTitle("Procrastination RACER - "+version+'.'+patch);
 		mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -38,6 +42,6 @@ public MainLauncher() {
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setVisible(true);
 		
-		SaveLoadDataStream.verifyLoadFile(saveGameName);
+		
 	}
 }

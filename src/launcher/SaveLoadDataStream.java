@@ -4,7 +4,7 @@ public class SaveLoadDataStream {
 	private static int bestTotal = 20000;
 	private static int bestLap = 4000;
 	
-	//checks if the save file exists, if it does load it, else create it first. 
+	/** Loads the save file in a safe way to prevent io exceptions  by creating the file if it doesn't exist*/
 	static void verifyLoadFile(String fileName) throws IOException {
 		File f = new File(fileName);
 		if(f.exists() && !f.isDirectory()) { 
