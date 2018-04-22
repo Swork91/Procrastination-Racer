@@ -30,6 +30,7 @@ public class RaceTrack extends JPanel {
 	
 	private boolean checkpoint = false;
 	private boolean didGameStart = false;
+	private boolean reverseControls = false;
 	
 	private static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
 	private static String lapTimes = "Lap Times!";
@@ -46,79 +47,110 @@ public class RaceTrack extends JPanel {
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
+				/** DOWN PRESSED */
 				case (KeyEvent.VK_DOWN):
-					if (didGameStart == false) {
+					if (!didGameStart)
 						gameStart();
-					}
-					if (carYPos>=900 || (carXPos>=580 && carXPos<=1100 && carYPos>=280 && carYPos<=640)) {
-						break;
-					}
-					else {
-						carYPos+=speed;
-						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
-							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
-							speed = -20; //hit puddle consequence REVERSE CONTROLS
+					if (reverseControls) {
+						if (upPathBlocked()) 
+							break;
+						else {
+							upMove();
 							break;
 						}
-						break;
 					}
-
+					else {
+						if (downPathBlocked()) 
+							break;
+						else {
+							downMove();
+							if (hitPuddle()) {
+								reverseControls = true;
+								break;
+							}
+							break;
+						}
+					}
+				/** UP PRESSED */
 				case KeyEvent.VK_UP: 
-					if (didGameStart == false) {
+					if (!didGameStart) 
 						gameStart();
-					}
-					if (carYPos<=50 || (carXPos>=580 && carXPos<=1100 && carYPos>=300 && carYPos<=660)) {
-						break;
-					}
-					else {
-						carYPos-=speed;
-						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
-							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
-							speed = -20; //hit puddle consequence REVERSE CONTROLS
+					if (reverseControls) {
+						if (downPathBlocked()) 
+							break;
+						else {
+							downMove();
 							break;
 						}
-						break;
 					}
+					else {
+						if (upPathBlocked()) 
+							break;
+						else {
+							upMove();
+							if (hitPuddle()) {
+								reverseControls = true;
+								break;
+							}
+							break;
+						}
+					}
+				/** LEFT PRESSED */
 				case KeyEvent.VK_LEFT: 
-					if (didGameStart == false) {
+					if (!didGameStart) 
 						gameStart();
-					}
-					if (carXPos<=50 || (carXPos>=580 && carXPos<=1120 && carYPos>=300 && carYPos<=640)) {
-						break;
-					}
-					else {
-						carXPos-=speed; 
-						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
-							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
-							speed = -20; //hit puddle consequence REVERSE CONTROLS
+					if (reverseControls) {
+						if (rightPathBlocked()) 
+							break;
+						else {
+							rightMove();
 							break;
 						}
-						break;
 					}
+					else {
+						if (leftPathBlocked()) 
+							break;
+						else {
+							leftMove();
+							if (hitPuddle()) {
+								reverseControls = true;
+								break;
+							}
+							break;
+						}
+					}
+				/** RIGHT PRESSED */
 				case KeyEvent.VK_RIGHT: 
-					if (didGameStart == false) {
+					if (!didGameStart) 
 						gameStart();
-					}
-					if (carXPos>=1650 || (carXPos>=560 && carXPos<=1100 && carYPos>=300 && carYPos<=640)) {
-						break;
-					}
-					else {
-						carXPos+=speed;						
-						if (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
-							carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8) {
-							speed = -20; //hit puddle consequence REVERSE CONTROLS
+					if (reverseControls) {
+						if (leftPathBlocked()) 
+							break;
+						else {
+							leftMove();
 							break;
 						}
-						break;
 					}
-				//cheat
+					else {
+						if (rightPathBlocked()) 
+							break;
+						else {
+							rightMove();
+							if (hitPuddle()) {
+								reverseControls = true;
+								break;
+							}
+							break;
+						}
+					}
+				/** CHEAT KEY PRESSED */
 				case KeyEvent.VK_C:
-					speed=100;
+					speed=50;
 					lapNumber=0;
 				}
 				repaint();
 				/***********************************************************************
-				 *  lap checkpoint system:
+				 *  Lap Checkpoint System:
 				 * should keep track if the car actually makes a loop around the track 
 				 * this prevents players from just going backwards and cheating laps
 				 ************************************************************************/
@@ -168,8 +200,8 @@ public class RaceTrack extends JPanel {
 				}
 				/* TODO delete me when done debugging 
 				 * that means all these system.out lines */
-				//System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint+"\n"+"speed: "+speed);
-				System.out.println("best time: " + SaveLoadDataStream.getBestTotalTime() + "\nbest lap: " + SaveLoadDataStream.getBestLapTime());
+				System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint+"\n"+"speed: "+speed);
+				//System.out.println("best time: " + SaveLoadDataStream.getBestTotalTime() + "\nbest lap: " + SaveLoadDataStream.getBestLapTime());
 				//System.out.println("xar xpos: "+carXPos+"\ncar ypos: "+carYPos+"\nbad x"+": "+RaceInfoHUD.getRandomXCoord()+"\n"+"bad y: "+RaceInfoHUD.getRandomYCoord()+"\n"+"speed: "+speed);
 			}
 		});
@@ -221,6 +253,9 @@ public class RaceTrack extends JPanel {
         }
         
 	}
+	public void downControls() {
+		
+	}
 	
 	public static String getLapTimes() {
 		return lapTimes;
@@ -256,5 +291,42 @@ public class RaceTrack extends JPanel {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+	}
+	/** Returns if the car is in a puddles area. */
+	public boolean hitPuddle() {
+		return (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
+				carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8);
+	}
+	/** returns false if it is possible to move down, true if the path is blocked. */
+	public boolean downPathBlocked() {
+		return (carYPos>=900 || (carXPos>=580 && carXPos<=1100 && carYPos>=280 && carYPos<=640));
+	}
+	
+	public void downMove() {
+		carYPos+=speed;
+	}
+	/** returns false if it is possible to move up, true if the path is blocked. */
+	public boolean upPathBlocked() {
+		return (carYPos<=50 || (carXPos>=580 && carXPos<=1100 && carYPos>=300 && carYPos<=660));
+	}
+	
+	public void upMove() {
+		carYPos-=speed;
+	}
+	/** returns false if it is possible to move left, true if the path is blocked. */
+	public boolean leftPathBlocked() {
+		return (carXPos<=50 || (carXPos>=580 && carXPos<=1120 && carYPos>=300 && carYPos<=640));
+	}
+	
+	public void leftMove() {
+		carXPos-=speed;
+	}
+	/** returns false if it is possible to move right, true if the path is blocked. */
+	public boolean rightPathBlocked() {
+		return (carXPos>=1650 || (carXPos>=560 && carXPos<=1100 && carYPos>=300 && carYPos<=640));
+	}
+	
+	public void rightMove() {
+		carXPos+=speed;
 	}
 }

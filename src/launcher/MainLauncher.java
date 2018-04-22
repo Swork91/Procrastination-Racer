@@ -8,15 +8,16 @@ import track.RaceTrack;
 import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
-static final private int version = 0; //0 for beta I guess
-static final private int patch = 16; 
+static final private int version = 17; //0 for beta I guess
+static final private int patch = 0; 
 /*************************** Patch Notes *********************************
- * 0.16 - Bug fixing
- * save game was actually working fine, but I wasn't displaying the saved
- * scores correctly on the HUD. Updated the RaceTrack class to change the
- * HUD correctly. Also I made it more readable and documented while there. 
+ * 0.17 - Bug fixing II
+ * Reworked the car reverse code to not rely on the speed variable. 
+ * And again I added some more methods to simplify the movement code. 
+ * It looks downright human readable at this point, but I added a good
+ * amount of documentation to it anyway. 
  *************************** Known Issues ********************************
- * when car hits a puddle it will be able to clip into out of bounds.
+ * None I guess!
  ************************************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();
