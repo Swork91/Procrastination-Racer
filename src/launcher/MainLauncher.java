@@ -9,17 +9,17 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 18; 
+static final private int patch = 19; 
 /*************************** Patch Notes *********************************
- * 0.18 - Layout fixing
- * probably use box layout for the hud and just not use hardcoded areas
- * for the racetracks detection. instead use getHeight(), getWidth().
+ * 0.19 - Layout fixing
+ * Edited all the drawn objects to work with an adjustable frame. 
+ * Everything should work with any resolution now. 
  *************************** Known Issues ********************************
- * None I guess!
+ * Puddle's first appearance 0-5sec can be off screen on small resolutions
  ************************************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();
-public RaceInfoHUD righthud = new RaceInfoHUD();
+private RaceInfoHUD righthud = new RaceInfoHUD();
 
 public MainLauncher() {
 	add(raceTrack, BorderLayout.CENTER);

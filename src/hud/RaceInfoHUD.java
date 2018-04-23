@@ -68,8 +68,8 @@ public class RaceInfoHUD extends JPanel {
 			if (RaceTrack.getLapNumber() != winLaps && timeMiliSeconds>=0)
 				timeMiliSeconds++; //TODO stop the timer, not just my counter. Does 'timer.stop();' work?
 			if (timeMiliSeconds%5000==0) {
-		    	randomX = ThreadLocalRandom.current().nextInt(0, 1650);
-		    	randomY = ThreadLocalRandom.current().nextInt(0, 900);
+		    	randomX = ThreadLocalRandom.current().nextInt(0, getWidth());
+		    	randomY = ThreadLocalRandom.current().nextInt(0, getHeight());
 			}
 			String result = formatter.format(timeMiliSeconds);
 			seconds.setText(result);

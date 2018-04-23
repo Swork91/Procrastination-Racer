@@ -22,9 +22,9 @@ public class RaceTrack extends JPanel {
 	private Image raceTrackImage = new ImageIcon("images\\raceTrackBG1.png").getImage();
     private Image carImage = new ImageIcon("images\\car1.png").getImage();
     
-	private int carXPos = 300;
-	private int carYPos = 560;
-	private int speed = 20;//don't go too fast or you'll clip through stuff
+	private int carXPos = 0;
+	private int carYPos = 0;
+	private int speed = 20;
 	private int carWidth = 100;
 	private int carLength = 100;
 	
@@ -49,6 +49,7 @@ public class RaceTrack extends JPanel {
 				switch (e.getKeyCode()) {
 				/** DOWN PRESSED */
 				case (KeyEvent.VK_DOWN):
+					speed = getHeight()/50;
 					if (!didGameStart)
 						gameStart();
 					if (reverseControls) {
@@ -73,6 +74,7 @@ public class RaceTrack extends JPanel {
 					}
 				/** UP PRESSED */
 				case KeyEvent.VK_UP: 
+					speed = getHeight()/50;
 					if (!didGameStart) 
 						gameStart();
 					if (reverseControls) {
@@ -97,6 +99,7 @@ public class RaceTrack extends JPanel {
 					}
 				/** LEFT PRESSED */
 				case KeyEvent.VK_LEFT: 
+					speed = getHeight()/50;
 					if (!didGameStart) 
 						gameStart();
 					if (reverseControls) {
@@ -121,6 +124,7 @@ public class RaceTrack extends JPanel {
 					}
 				/** RIGHT PRESSED */
 				case KeyEvent.VK_RIGHT: 
+					speed = getHeight()/50;
 					if (!didGameStart) 
 						gameStart();
 					if (reverseControls) {
@@ -145,7 +149,6 @@ public class RaceTrack extends JPanel {
 					}
 				/** CHEAT KEY PRESSED */
 				case KeyEvent.VK_C:
-					speed=50;
 					lapNumber=0;
 				}
 				repaint();
@@ -154,10 +157,10 @@ public class RaceTrack extends JPanel {
 				 * should keep track if the car actually makes a loop around the track 
 				 * this prevents players from just going backwards and cheating laps
 				 ************************************************************************/
-				if ((carXPos>=1100 && carYPos>=400) && (carXPos<=getWidth() && carYPos<=getHeight()/2)) {
+				if (carXPos>=getWidth()*3/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8) {
 					checkpoint = true;
 				}
-				if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=680 && carYPos<=getHeight()/2) && checkpoint) {
+				if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=getWidth()*3/8 && carYPos<=getHeight()/2) && checkpoint) {
 					lapNumber++;
 					checkpoint = false;
 					//calculates time for each lap and write it to the lapTimes string. 
@@ -228,7 +231,7 @@ public class RaceTrack extends JPanel {
         g.fillOval(RaceInfoHUD.getRandomXCoord(), RaceInfoHUD.getRandomYCoord(), getWidth()/8, getHeight()/8); //puddle?
 
         g.setColor(Color.YELLOW);
-        g.fillRect(0, getHeight()/2, getWidth()/2-getWidth()/8, getHeight()/64); //start
+        g.fillRect(0, getHeight()/2, getWidth()/2-getWidth()/8, getHeight()/64); //starting line
         
         //check for win and display win screen
         if (winLaps>lapNumber) {
@@ -268,6 +271,10 @@ public class RaceTrack extends JPanel {
 	//(re)sets the timer to zero
 	public void gameStart() {
 		didGameStart = true;
+		carXPos = getWidth()/7;
+		carYPos = getHeight()/2;
+		carWidth = getWidth()/20;
+		carLength = getHeight()/10;
 		RaceInfoHUD.setTimeMiliSeconds(0);
 	}
 	/** Checks if a LAP time is a record. Then temp-saves it and updates the HUD. */
@@ -299,7 +306,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move down, true if the path is blocked. */
 	public boolean downPathBlocked() {
-		return (carYPos>=900 || (carXPos>=580 && carXPos<=1100 && carYPos>=280 && carYPos<=640));
+		return (carYPos+carLength>=getHeight() || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos+carLength>=getHeight()*3/8 && carYPos+carLength<=getHeight()*5/8));
 	}
 	
 	public void downMove() {
@@ -307,7 +314,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move up, true if the path is blocked. */
 	public boolean upPathBlocked() {
-		return (carYPos<=50 || (carXPos>=580 && carXPos<=1100 && carYPos>=300 && carYPos<=660));
+		return (carYPos<=0 || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
 	public void upMove() {
@@ -315,7 +322,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move left, true if the path is blocked. */
 	public boolean leftPathBlocked() {
-		return (carXPos<=50 || (carXPos>=580 && carXPos<=1120 && carYPos>=300 && carYPos<=640));
+		return (carXPos<=0 || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
 	public void leftMove() {
@@ -323,7 +330,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move right, true if the path is blocked. */
 	public boolean rightPathBlocked() {
-		return (carXPos>=1650 || (carXPos>=560 && carXPos<=1100 && carYPos>=300 && carYPos<=640));
+		return (carXPos+carWidth>=getWidth() || (carXPos+carWidth>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
 	public void rightMove() {
