@@ -1,14 +1,14 @@
 package hud;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.Timer;
-
 import launcher.SaveLoadDataStream;
 import track.RaceTrack;
 
@@ -20,28 +20,47 @@ import track.RaceTrack;
 * -Best times. (records)
 ************************************************************************************/
 public class RaceInfoHUD extends JPanel {
-	JLabel seconds = new JLabel("", SwingConstants.CENTER);
-	JLabel lap = new JLabel("", SwingConstants.CENTER);
-	JLabel lapRecord = new JLabel("", SwingConstants.CENTER);
-	JLabel bestRecods = new JLabel("", SwingConstants.CENTER);
+	private Box box = Box.createVerticalBox();
+	
+	private JLabel title = new JLabel("Procrastination RACER");
+	private JLabel seconds = new JLabel("", JLabel.CENTER);
+	private JLabel lap = new JLabel("", JLabel.CENTER);
+	private JLabel lapRecord = new JLabel("", JLabel.CENTER);
+	private JLabel bestRecods = new JLabel("", JLabel.CENTER);
 	
 	private static int timeMiliSeconds = -1;
 	private static int winLaps = 5;
 	private static int randomX = ThreadLocalRandom.current().nextInt(0, 1650);
 	private static int randomY = ThreadLocalRandom.current().nextInt(0, 900);
-	static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
+	private static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
 	private static String srecordBestTotalTime = formatter.format(SaveLoadDataStream.getBestTotalTime());
 	private static String srecordBestLapTime = formatter.format(SaveLoadDataStream.getBestLapTime());
 	
 	public RaceInfoHUD() {
+		this.setLayout(new BorderLayout());
 		Timer timer = new Timer(1, new TimerListener());
 		timer.start();
+				
+		title.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		box.add(title);
+		box.add(Box.createVerticalStrut(20));
 		
-		add(new JLabel("Procrastination RACER"));
-		add(seconds);
-		add(lap);
-		add(lapRecord);
-		add(bestRecods);
+		seconds.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		box.add(seconds);
+		box.add(Box.createVerticalStrut(8));
+		
+		lap.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		box.add(lap);
+		box.add(Box.createVerticalStrut(8));
+		
+		lapRecord.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		box.add(lapRecord);
+		box.add(Box.createGlue());
+		
+		bestRecods.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+		box.add(bestRecods);
+		
+		add(box, BorderLayout.CENTER);
 	}
 	
 	class TimerListener implements ActionListener{
