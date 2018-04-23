@@ -9,11 +9,10 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 19; 
+static final private int patch = 20; 
 /*************************** Patch Notes *********************************
- * 0.19 - Layout fixing
- * Edited all the drawn objects to work with an adjustable frame. 
- * Everything should work with any resolution now. 
+ * 0.20 - Layout fixing part 3
+ * I forgot to fix the win screen lol
  *************************** Known Issues ********************************
  * Puddle's first appearance 0-5sec can be off screen on small resolutions
  ************************************************************************/

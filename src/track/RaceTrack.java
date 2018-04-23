@@ -149,7 +149,7 @@ public class RaceTrack extends JPanel {
 					}
 				/** CHEAT KEY PRESSED */
 				case KeyEvent.VK_C:
-					lapNumber=0;
+					lapNumber=5;
 				}
 				repaint();
 				/***********************************************************************
@@ -243,16 +243,17 @@ public class RaceTrack extends JPanel {
         	
         	g.setColor(Color.WHITE);
         	// W
-        	g.drawLine(getWidth()/2-20-200, getHeight()/2-100, getWidth()/2-200, getHeight()/2);
-        	g.drawLine(getWidth()/2+20-200, getHeight()/2-100, getWidth()/2-200, getHeight()/2);
-        	g.drawLine(getWidth()/2-20-200+40, getHeight()/2-100, getWidth()/2-200+40, getHeight()/2);
-        	g.drawLine(getWidth()/2+20-200+40, getHeight()/2-100, getWidth()/2-200+40, getHeight()/2);
+        	g.fillRect(getWidth()*3/8, getHeight()*15/32, getWidth()/128, getHeight()/16);
+        	g.fillRect(getWidth()*3/8+getWidth()/64, getHeight()*15/32, getWidth()/128, getHeight()/16);
+        	g.fillRect(getWidth()*3/8+getWidth()*2/64, getHeight()*15/32, getWidth()/128, getHeight()/16);
+        	g.fillRect(getWidth()*3/8, getHeight()*33/64, getWidth()/32, getHeight()/64);
         	// I
-        	g.drawLine(getWidth()/2, getHeight()/2-50, getWidth()/2, getHeight()/2+50);
+        	g.fillRect(getWidth()*1/2, getHeight()*15/32, getWidth()/128, getHeight()/16);
         	// N
-        	g.drawLine(getWidth()/2+200, getHeight()/2+100-50, getWidth()/2+200, getHeight()/2+100+50);
-        	g.drawLine(getWidth()/2+200+50, getHeight()/2+100-50, getWidth()/2+200, getHeight()/2+100+50);
-        	g.drawLine(getWidth()/2+200+50, getHeight()/2+100-50, getWidth()/2+200+50, getHeight()/2+100+50);
+        	g.fillRect(getWidth()*5/8-getWidth()*2/64, getHeight()*15/32, getWidth()/128, getHeight()/16);
+        	g.fillRect(getWidth()*5/8-getWidth()*2/64, getHeight()*31/64, getWidth()/64, getHeight()/64);
+        	g.fillRect(getWidth()*5/8-getWidth()*1/64, getHeight()*16/32, getWidth()/64, getHeight()/64);
+        	g.fillRect(getWidth()*5/8-getWidth()*1/128, getHeight()*15/32, getWidth()/128, getHeight()/16);
         }
         
 	}
