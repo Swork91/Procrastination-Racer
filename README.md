@@ -50,7 +50,8 @@ Final project showing java knowledge by making a race car game. Done by splittin
 
 
 ## Agile 2(Todo)
-nothing yet!
+![Sprint2 UI changes](https://i.imgur.com/EptgSH1.png)
+
 
 ## Agile 3(Todo)
 nothing yet!
