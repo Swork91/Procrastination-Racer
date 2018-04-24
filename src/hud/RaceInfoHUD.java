@@ -47,11 +47,11 @@ public class RaceInfoHUD extends JPanel {
 		
 		seconds.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		box.add(seconds);
-		box.add(Box.createVerticalStrut(8));
+		box.add(Box.createVerticalStrut(20));
 		
 		lap.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		box.add(lap);
-		box.add(Box.createVerticalStrut(8));
+		box.add(Box.createVerticalStrut(20));
 		
 		lapRecord.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 		box.add(lapRecord);

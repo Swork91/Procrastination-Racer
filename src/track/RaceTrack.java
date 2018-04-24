@@ -21,6 +21,7 @@ import launcher.SaveLoadDataStream;
 public class RaceTrack extends JPanel {
 	private Image raceTrackImage = new ImageIcon("images\\raceTrackBG1.png").getImage();
     private Image carImage = new ImageIcon("images\\car1.png").getImage();
+    private Image startOverlay = new ImageIcon("images\\Procrastination_Racer_Start_Menu.png").getImage();
     
 	private int carXPos = 0;
 	private int carYPos = 0;
@@ -40,7 +41,7 @@ public class RaceTrack extends JPanel {
 	private static String lap4 = "error";
 	private static String lap5 = "error";
 	private int lap1Time, lap2Time, lap3Time, lap4Time, lap5Time;
-	private static int lapNumber = 0;
+	private static int lapNumber = -1;
 	private static int winLaps = 5;
 	
 	public RaceTrack() {
@@ -50,8 +51,6 @@ public class RaceTrack extends JPanel {
 				/** DOWN PRESSED */
 				case (KeyEvent.VK_DOWN):
 					speed = getHeight()/50;
-					if (!didGameStart)
-						gameStart();
 					if (reverseControls) {
 						if (upPathBlocked()) 
 							break;
@@ -75,8 +74,6 @@ public class RaceTrack extends JPanel {
 				/** UP PRESSED */
 				case KeyEvent.VK_UP: 
 					speed = getHeight()/50;
-					if (!didGameStart) 
-						gameStart();
 					if (reverseControls) {
 						if (downPathBlocked()) 
 							break;
@@ -100,8 +97,6 @@ public class RaceTrack extends JPanel {
 				/** LEFT PRESSED */
 				case KeyEvent.VK_LEFT: 
 					speed = getHeight()/50;
-					if (!didGameStart) 
-						gameStart();
 					if (reverseControls) {
 						if (rightPathBlocked()) 
 							break;
@@ -125,8 +120,6 @@ public class RaceTrack extends JPanel {
 				/** RIGHT PRESSED */
 				case KeyEvent.VK_RIGHT: 
 					speed = getHeight()/50;
-					if (!didGameStart) 
-						gameStart();
 					if (reverseControls) {
 						if (leftPathBlocked()) 
 							break;
@@ -150,6 +143,14 @@ public class RaceTrack extends JPanel {
 				/** CHEAT KEY PRESSED */
 				case KeyEvent.VK_C:
 					lapNumber=5;
+					break;
+				/** start game */
+				case KeyEvent.VK_SPACE:
+					lapNumber=0;
+					speed = getHeight()/50;
+					if (!didGameStart)
+						gameStart();
+					break;
 				}
 				repaint();
 				/***********************************************************************
@@ -218,6 +219,7 @@ public class RaceTrack extends JPanel {
 	 * 	danger puddles
 	 * 	The Race Car
 	 * 	Win Screen
+	 *  Start Screen
 	 ******************************************************************/
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);		
@@ -226,12 +228,11 @@ public class RaceTrack extends JPanel {
         g.setColor(Color.GREEN);
         g.fillRect(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
         
-        //TODO PUDDLES. Its puddle time.
-        g.setColor(Color.BLUE);
-        g.fillOval(RaceInfoHUD.getRandomXCoord(), RaceInfoHUD.getRandomYCoord(), getWidth()/8, getHeight()/8); //puddle?
-
         g.setColor(Color.YELLOW);
         g.fillRect(0, getHeight()/2, getWidth()/2-getWidth()/8, getHeight()/64); //starting line
+        
+        g.setColor(Color.BLUE);
+        g.fillOval(RaceInfoHUD.getRandomXCoord(), RaceInfoHUD.getRandomYCoord(), getWidth()/8, getHeight()/8); //puddle
         
         //check for win and display win screen
         if (winLaps>lapNumber) {
@@ -254,6 +255,13 @@ public class RaceTrack extends JPanel {
         	g.fillRect(getWidth()*5/8-getWidth()*2/64, getHeight()*31/64, getWidth()/64, getHeight()/64);
         	g.fillRect(getWidth()*5/8-getWidth()*1/64, getHeight()*16/32, getWidth()/64, getHeight()/64);
         	g.fillRect(getWidth()*5/8-getWidth()*1/128, getHeight()*15/32, getWidth()/128, getHeight()/16);
+        }
+        /** START SCREEN */
+        if (lapNumber<0) {
+        	g.setColor(Color.WHITE);
+        	g.fillRect(0, 0, getWidth(), getHeight());
+        	g.drawImage(startOverlay, 0, 0, getWidth(), getHeight(), this);
+        	
         }
         
 	}

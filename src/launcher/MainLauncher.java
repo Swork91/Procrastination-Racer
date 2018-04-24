@@ -9,12 +9,13 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 20; 
+static final private int patch = 21; 
 /*************************** Patch Notes *********************************
- * 0.20 - Layout fixing part 3
- * I forgot to fix the win screen lol
+ * 0.21 - Start Screen 
+ * Added a start screen to the game. Man the good art makes the rest of
+ *  the game seem so bad. 
  *************************** Known Issues ********************************
- * Puddle's first appearance 0-5sec can be off screen on small resolutions
+ * left movement can get stuck in middle out of bounds. 
  ************************************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();
@@ -33,12 +34,10 @@ public MainLauncher() {
 		MainLauncher mainWindow = new MainLauncher();
 		mainWindow.setTitle("Procrastination RACER - "+version+'.'+patch);
 		mainWindow.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		mainWindow.setSize(1920, 1080);
+		mainWindow.setSize(1280, 720);
 		//mainWindow.pack();
 		//mainWindow.setResizable(false);
 		mainWindow.setLocationRelativeTo(null);
 		mainWindow.setVisible(true);
-		
 	}
-
 }
