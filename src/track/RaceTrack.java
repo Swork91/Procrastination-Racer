@@ -228,8 +228,8 @@ public class RaceTrack extends JPanel {
         g.setColor(Color.GREEN);
         g.fillRect(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
         
-        g.setColor(Color.YELLOW);
-        g.fillRect(0, getHeight()/2, getWidth()/2-getWidth()/8, getHeight()/64); //starting line
+        g.setColor(Color.WHITE);
+        g.fillRect(0, getHeight()/2, getWidth()/2-getWidth()/8, getHeight()/128); //starting line
         
         g.setColor(Color.BLUE);
         g.fillOval(RaceInfoHUD.getRandomXCoord(), RaceInfoHUD.getRandomYCoord(), getWidth()/8, getHeight()/8); //puddle

@@ -9,13 +9,15 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 21; 
+static final private int patch = 22; 
 /*************************** Patch Notes *********************************
- * 0.21 - Start Screen 
- * Added a start screen to the game. Man the good art makes the rest of
- *  the game seem so bad. 
+ * 0.22 - What a pretty car. 
+ * I hate java's layout managers. If I ever make a GUI with them 
+ * again I'm becoming a plumber so I have to deal with less shit. 
+ * Instead I replaced all the graphics with more appeasing things. 
  *************************** Known Issues ********************************
- * left movement can get stuck in middle out of bounds. 
+ * left movement can get stuck in middle out of bounds. (layout issue.)
+ * right movement goes slightly off screen. (layout issue.)
  ************************************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();
