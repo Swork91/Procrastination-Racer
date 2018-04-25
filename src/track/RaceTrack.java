@@ -47,166 +47,162 @@ public class RaceTrack extends JPanel {
 	public RaceTrack() {
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				switch (e.getKeyCode()) {
-				/** DOWN PRESSED */
-				case (KeyEvent.VK_DOWN):
-					speed = getHeight()/50;
-					if (reverseControls) {
-						if (upPathBlocked()) 
-							break;
-						else {
-							upMove();
-							break;
-						}
-					}
-					else {
-						if (downPathBlocked()) 
-							break;
-						else {
-							downMove();
-							if (hitPuddle()) {
-								reverseControls = true;
+				boolean done = false;
+				do {
+					switch (e.getKeyCode()) {
+					/** DOWN PRESSED */
+					case (KeyEvent.VK_DOWN):
+						speed = getHeight()/50;
+						if (reverseControls) {
+							if (upPathBlocked()) {
+								done = true;
 								break;
 							}
-							break;
-						}
-					}
-				/** UP PRESSED */
-				case KeyEvent.VK_UP: 
-					speed = getHeight()/50;
-					if (reverseControls) {
-						if (downPathBlocked()) 
-							break;
-						else {
-							downMove();
-							break;
-						}
-					}
-					else {
-						if (upPathBlocked()) 
-							break;
-						else {
-							upMove();
-							if (hitPuddle()) {
-								reverseControls = true;
+							else {
+								upMove();
+								done = true;
 								break;
 							}
-							break;
 						}
-					}
-				/** LEFT PRESSED */
-				case KeyEvent.VK_LEFT: 
-					speed = getHeight()/50;
-					if (reverseControls) {
-						if (rightPathBlocked()) 
-							break;
 						else {
-							rightMove();
-							break;
-						}
-					}
-					else {
-						if (leftPathBlocked()) 
-							break;
-						else {
-							leftMove();
-							if (hitPuddle()) {
-								reverseControls = true;
+							if (downPathBlocked()) {
+								done = true;
 								break;
 							}
-							break;
-						}
-					}
-				/** RIGHT PRESSED */
-				case KeyEvent.VK_RIGHT: 
-					speed = getHeight()/50;
-					if (reverseControls) {
-						if (leftPathBlocked()) 
-							break;
-						else {
-							leftMove();
-							break;
-						}
-					}
-					else {
-						if (rightPathBlocked()) 
-							break;
-						else {
-							rightMove();
-							if (hitPuddle()) {
-								reverseControls = true;
+							else {
+								downMove();
+								if (hitPuddle()) {
+									reverseControls = true;
+									done = true;
+									break;
+								}
+								done = true;
 								break;
 							}
-							break;
 						}
+					/** UP PRESSED */
+					case KeyEvent.VK_UP: 
+						speed = getHeight()/50;
+						if (reverseControls) {
+							if (downPathBlocked()) {
+								done = true;
+								break;
+							}
+							else {
+								downMove();
+								done = true;
+								break;
+							}
+						}
+						else {
+							if (upPathBlocked()) {
+								done = true;
+								break;
+							}
+							else {
+								upMove();
+								if (hitPuddle()) {
+									reverseControls = true;
+									done = true;
+									break;
+								}
+								done = true;
+								break;
+							}
+						}
+					/** LEFT PRESSED */
+					case KeyEvent.VK_LEFT: 
+						speed = getHeight()/50;
+						if (reverseControls) {
+							if (rightPathBlocked()) {
+								done = true;
+								break;
+							}
+							else {
+								rightMove();
+								done = true;
+								break;
+							}
+						}
+						else {
+							if (leftPathBlocked()) {
+								done = true;
+								break;
+							}
+							else {
+								leftMove();
+								if (hitPuddle()) {
+									reverseControls = true;
+									done = true;
+									break;
+								}
+								done = true;
+								break;
+							}
+						}
+					/** RIGHT PRESSED */
+					case KeyEvent.VK_RIGHT: 
+						speed = getHeight()/50;
+						if (reverseControls) {
+							if (leftPathBlocked()) {
+								done = true;
+								break;
+							}
+							else {
+								leftMove();
+								done = true;
+								break;
+							}
+						}
+						else {
+							if (rightPathBlocked()) {
+								done = true;
+								break;
+							}
+							else {
+								rightMove();
+								if (hitPuddle()) {
+									reverseControls = true;
+									done = true;
+									break;
+								}
+								done = true;
+								break;
+							}
+						}
+					/** - Alternate Controls - 
+					 * Link to normal controls and don't
+					 *  give the loop's exit condition */
+					case KeyEvent.VK_W:
+						e.setKeyCode(KeyEvent.VK_UP);
+						break;
+					case KeyEvent.VK_A:
+						e.setKeyCode(KeyEvent.VK_LEFT);
+						break;
+					case KeyEvent.VK_S:
+						e.setKeyCode(KeyEvent.VK_DOWN);
+						break;
+					case KeyEvent.VK_D:
+						e.setKeyCode(KeyEvent.VK_RIGHT);
+						break;
+					/** CHEAT KEY PRESSED */
+					case KeyEvent.VK_C:
+						lapNumber=5;
+						done = true;
+						break;
+					/** start game */
+					case KeyEvent.VK_SPACE:
+						if (!didGameStart) {
+							lapNumber=0;
+							speed = getHeight()/50;
+							gameStart();
+						}
+						done = true;
+						break;
 					}
-				/** CHEAT KEY PRESSED */
-				case KeyEvent.VK_C:
-					lapNumber=5;
-					break;
-				/** start game */
-				case KeyEvent.VK_SPACE:
-					lapNumber=0;
-					speed = getHeight()/50;
-					if (!didGameStart)
-						gameStart();
-					break;
-				}
+				} while(!done);
 				repaint();
-				/***********************************************************************
-				 *  Lap Checkpoint System:
-				 * should keep track if the car actually makes a loop around the track 
-				 * this prevents players from just going backwards and cheating laps
-				 ************************************************************************/
-				if (carXPos>=getWidth()*3/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8) {
-					checkpoint = true;
-				}
-				if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=getWidth()*3/8 && carYPos<=getHeight()/2) && checkpoint) {
-					lapNumber++;
-					checkpoint = false;
-					//calculates time for each lap and write it to the lapTimes string. 
-					switch (lapNumber) {
-						case 1:
-							lap1Time = RaceInfoHUD.getTimeMiliSeconds();
-							lap1 = formatter.format(lap1Time);
-							lapTimes = lap1;
-							//new record
-							checkSaveLapTime(lap1Time);
-							break;
-						case 2:
-							lap2Time = RaceInfoHUD.getTimeMiliSeconds() - lap1Time;
-							lap2 = formatter.format(lap2Time);
-							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "</html>";
-							checkSaveLapTime(lap2Time);
-							break;
-						case 3:
-							lap3Time = RaceInfoHUD.getTimeMiliSeconds() - (lap2Time + lap1Time);
-							lap3 = formatter.format(lap3Time);
-							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "</html>";
-							checkSaveLapTime(lap3Time);
-							break;
-						case 4:
-							lap4Time = RaceInfoHUD.getTimeMiliSeconds() - (lap3Time + lap2Time + lap1Time);
-							lap4 = formatter.format(lap4Time);
-							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "</html>";
-							checkSaveLapTime(lap4Time);
-							break;
-						case 5:
-							lap5Time = RaceInfoHUD.getTimeMiliSeconds() - (lap4Time + lap3Time + lap2Time + lap1Time);
-							lap5 = formatter.format(lap5Time);
-							lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "<br>" + lap5 + "</html>";
-							checkSaveLapTime(lap5Time);
-							checkSaveTotalTime();
-							autoSave();
-							break;
-					}
-					
-				}
-				/* TODO delete me when done debugging 
-				 * that means all these system.out lines */
-				System.out.println("xpos: "+carXPos+"\nypos: "+carYPos+"\n"+"checkpoint: "+checkpoint+"\n"+"speed: "+speed);
-				//System.out.println("best time: " + SaveLoadDataStream.getBestTotalTime() + "\nbest lap: " + SaveLoadDataStream.getBestLapTime());
-				//System.out.println("xar xpos: "+carXPos+"\ncar ypos: "+carYPos+"\nbad x"+": "+RaceInfoHUD.getRandomXCoord()+"\n"+"bad y: "+RaceInfoHUD.getRandomYCoord()+"\n"+"speed: "+speed);
+				checkpointSystem();
 			}
 		});
 	}
@@ -263,12 +259,8 @@ public class RaceTrack extends JPanel {
         	g.drawImage(startOverlay, 0, 0, getWidth(), getHeight(), this);
         	
         }
-        
 	}
-	public void downControls() {
-		
-	}
-	
+
 	public static String getLapTimes() {
 		return lapTimes;
 	}
@@ -276,9 +268,61 @@ public class RaceTrack extends JPanel {
 	public static int getLapNumber() {
 		return lapNumber;
 	}
+	/***********************************************************************
+	 *  Lap Checkpoint System:
+	 * Keeps track if the car actually makes a loop around the track 
+	 * this prevents players from just going backwards and cheating laps.
+	 * Also writes the lap times and total time to variables. 
+	 ************************************************************************/
+	private void checkpointSystem() {
+		if (carXPos>=getWidth()*3/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8) {
+			checkpoint = true;
+		}
+		if ((carXPos>=0 && carYPos>=getHeight()/2-carLength) && (carXPos<=getWidth()*3/8 && carYPos<=getHeight()/2) && checkpoint) {
+			lapNumber++;
+			checkpoint = false;
+			//calculates time for each lap and write it to the lapTimes string. 
+			switch (lapNumber) {
+				case 1:
+					lap1Time = RaceInfoHUD.getTimeMiliSeconds();
+					lap1 = formatter.format(lap1Time);
+					lapTimes = lap1;
+					//new record
+					checkSaveLapTime(lap1Time);
+					break;
+				case 2:
+					lap2Time = RaceInfoHUD.getTimeMiliSeconds() - lap1Time;
+					lap2 = formatter.format(lap2Time);
+					lapTimes = "<html>" + lap1 + "<br>" + lap2 + "</html>";
+					checkSaveLapTime(lap2Time);
+					break;
+				case 3:
+					lap3Time = RaceInfoHUD.getTimeMiliSeconds() - (lap2Time + lap1Time);
+					lap3 = formatter.format(lap3Time);
+					lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "</html>";
+					checkSaveLapTime(lap3Time);
+					break;
+				case 4:
+					lap4Time = RaceInfoHUD.getTimeMiliSeconds() - (lap3Time + lap2Time + lap1Time);
+					lap4 = formatter.format(lap4Time);
+					lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "</html>";
+					checkSaveLapTime(lap4Time);
+					break;
+				case 5:
+					lap5Time = RaceInfoHUD.getTimeMiliSeconds() - (lap4Time + lap3Time + lap2Time + lap1Time);
+					lap5 = formatter.format(lap5Time);
+					lapTimes = "<html>" + lap1 + "<br>" + lap2 + "<br>" + lap3 + "<br>" + lap4 + "<br>" + lap5 + "</html>";
+					checkSaveLapTime(lap5Time);
+					checkSaveTotalTime();
+					autoSave();
+					break;
+			}
+			
+		}
+	}
 	
-	//(re)sets the timer to zero
-	public void gameStart() {
+	/** Method run to position everything correctly when the game starts */
+	private void gameStart() {
 		didGameStart = true;
 		carXPos = getWidth()/7;
 		carYPos = getHeight()/2;
@@ -287,21 +331,21 @@ public class RaceTrack extends JPanel {
 		RaceInfoHUD.setTimeMiliSeconds(0);
 	}
 	/** Checks if a LAP time is a record. Then temp-saves it and updates the HUD. */
-	public void checkSaveLapTime(int lapTime) {
+	private void checkSaveLapTime(int lapTime) {
 		if (lapTime < SaveLoadDataStream.getBestLapTime()) {
 			SaveLoadDataStream.setBestLapTime(lapTime);
 			RaceInfoHUD.setBestLapTime(lapTime);
 		}
 	}
 	/** Checks if the TOTAL time is a record. Then temp-saves it and updates the HUD. */
-	public void checkSaveTotalTime() {
+	private void checkSaveTotalTime() {
 		if (RaceInfoHUD.getTimeMiliSeconds() < SaveLoadDataStream.getBestTotalTime()) {
 			SaveLoadDataStream.setBestTotalTime(RaceInfoHUD.getTimeMiliSeconds());
 			RaceInfoHUD.setBestTotalTime(RaceInfoHUD.getTimeMiliSeconds());
 		}
 	}
 	/** Auto Save (actually writes to data file) */
-	public void autoSave() {
+	private void autoSave() {
 		try {
 			SaveLoadDataStream.save(MainLauncher.saveGameName);
 		} catch (IOException e1) {
@@ -309,7 +353,7 @@ public class RaceTrack extends JPanel {
 		}
 	}
 	/** Returns if the car is in a puddles area. */
-	public boolean hitPuddle() {
+	private boolean hitPuddle() {
 		return (carXPos>=RaceInfoHUD.getRandomXCoord() && carXPos<=RaceInfoHUD.getRandomXCoord()+getWidth()/8 &&
 				carYPos>=RaceInfoHUD.getRandomYCoord() && carYPos<=RaceInfoHUD.getRandomYCoord()+getHeight()/8);
 	}
@@ -318,31 +362,31 @@ public class RaceTrack extends JPanel {
 		return (carYPos+carLength>=getHeight() || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos+carLength>=getHeight()*3/8 && carYPos+carLength<=getHeight()*5/8));
 	}
 	
-	public void downMove() {
+	private void downMove() {
 		carYPos+=speed;
 	}
 	/** returns false if it is possible to move up, true if the path is blocked. */
-	public boolean upPathBlocked() {
+	private boolean upPathBlocked() {
 		return (carYPos<=0 || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
-	public void upMove() {
+	private void upMove() {
 		carYPos-=speed;
 	}
 	/** returns false if it is possible to move left, true if the path is blocked. */
-	public boolean leftPathBlocked() {
+	private boolean leftPathBlocked() {
 		return (carXPos<=0 || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
-	public void leftMove() {
+	private void leftMove() {
 		carXPos-=speed;
 	}
 	/** returns false if it is possible to move right, true if the path is blocked. */
-	public boolean rightPathBlocked() {
+	private boolean rightPathBlocked() {
 		return (carXPos+carWidth>=getWidth() || (carXPos+carWidth>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
-	public void rightMove() {
+	private void rightMove() {
 		carXPos+=speed;
 	}
 }

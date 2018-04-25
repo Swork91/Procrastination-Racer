@@ -9,16 +9,18 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 22; 
-/*************************** Patch Notes *********************************
- * 0.22 - What a pretty car. 
- * I hate java's layout managers. If I ever make a GUI with them 
- * again I'm becoming a plumber so I have to deal with less shit. 
- * Instead I replaced all the graphics with more appeasing things. 
- *************************** Known Issues ********************************
- * left movement can get stuck in middle out of bounds. (layout issue.)
- * right movement goes slightly off screen. (layout issue.)
- ************************************************************************/
+static final private int patch = 23; 
+/******************** Patch Notes **************************
+ * 0.23 - WASD control Support
+ * Added a loop surrounding the key listener that exits 
+ * on expected controls being used. Then just had the 
+ * alternate controls link to them without exiting the loop.
+ ******************** Known Issues *************************
+ * 1. left movement can get stuck in middle out of bounds.
+ * 2. right movement goes slightly off screen. (same as #1)
+ * 3. Main method isn't thread safe. 
+ * 3. I'm going to v1.0 soon and the game is still bad. 
+ **********************************************************/
 public static String saveGameName = "PRsave.dat"; //TODO this could be handled by the user.
 private RaceTrack raceTrack = new RaceTrack();
 private RaceInfoHUD righthud = new RaceInfoHUD();
