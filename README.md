@@ -1,7 +1,11 @@
 # Procrastination-Racer
 Final project showing java knowledge by making a race car game. Done by splitting it into three sprints, one per week.
 
-## Sprints
+## Controls/Options
+wasd keys or arrow keys to move, space to start. 
+Game window can be resized before starting to play in any resolution. 
+
+## Sprints Used to Complete Project
 ### Sprint 1 Plan
 * Car that goes.
 * Car wont go off track.
@@ -49,9 +53,9 @@ Final project showing java knowledge by making a race car game. Done by splittin
 ![Sprint1WinScreen](https://i.imgur.com/S7zGWF9.png)
 
 
-## Agile 2(Todo)
+## Agile 2
 ![Sprint2 UI changes](https://i.imgur.com/EptgSH1.png)
 
 
-## Agile 3(Todo)
+## Agile 3
 nothing yet!
