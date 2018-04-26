@@ -9,15 +9,17 @@ import hud.RaceInfoHUD;
 
 public class MainLauncher extends JFrame{
 static final private int version = 0; //0 for beta I guess
-static final private int patch = 23; 
+static final private int patch = 24; 
 /******************** Patch Notes **************************
- * 0.23 - WASD control Support
- * Added a loop surrounding the key listener that exits 
- * on expected controls being used. Then just had the 
- * alternate controls link to them without exiting the loop.
+ * 0.24 - bug fixing 4
+ * Added a visual indicator if controls get reversed. 
+ * Removed car clipping through center OOB.
+ * Fixed car getting stuck only when going left.
+ * Now the car gets stuck from any direction, but
+ * it can back out when it gets stuck. So not REALLY stuck.
  ******************** Known Issues *************************
- * 1. left movement can get stuck in middle out of bounds.
- * 2. right movement goes slightly off screen. (same as #1)
+ * 1. Middle out of bounds is sticky. (feature or bug?)
+ * 2. Car goes slightly off screen sometimes.
  * 3. Main method isn't thread safe. 
  * 3. I'm going to v1.0 soon and the game is still bad. 
  **********************************************************/

@@ -221,7 +221,11 @@ public class RaceTrack extends JPanel {
 		super.paintComponent(g);		
         g.drawImage(raceTrackImage, 0, 0, getWidth(), getHeight(), this); //background
         
-        g.setColor(Color.GREEN);
+        if (reverseControls)
+	        g.setColor(Color.RED);
+        else
+        	g.setColor(Color.GREEN);
+
         g.fillRect(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
         
         g.setColor(Color.WHITE);
@@ -234,7 +238,7 @@ public class RaceTrack extends JPanel {
         if (winLaps>lapNumber) {
         	g.drawImage(carImage, carXPos, carYPos, carWidth, carLength, this); //car
         }
-        else { //you WIN
+        else { //"you WIN". I admit this should have been a graphic instead of me trying to make rectangle art. 
         	g.setColor(Color.ORANGE);
         	g.fillRoundRect(getWidth()/4, getHeight()/4, getWidth()/2, getHeight()/2, getWidth()/3, getHeight()/3);
         	
@@ -359,7 +363,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move down, true if the path is blocked. */
 	public boolean downPathBlocked() {
-		return (carYPos+carLength>=getHeight() || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos+carLength>=getHeight()*3/8 && carYPos+carLength<=getHeight()*5/8));
+		return (carYPos+carLength>=getHeight() || (carXPos+carWidth>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos+carLength>=getHeight()*3/8 && carYPos+carLength<=getHeight()*5/8));
 	}
 	
 	private void downMove() {
@@ -367,7 +371,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move up, true if the path is blocked. */
 	private boolean upPathBlocked() {
-		return (carYPos<=0 || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
+		return (carYPos<=0 || (carXPos+carWidth>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
 	private void upMove() {
@@ -375,7 +379,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move left, true if the path is blocked. */
 	private boolean leftPathBlocked() {
-		return (carXPos<=0 || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
+		return (carXPos<=0 || (carXPos>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos+carLength>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
 	private void leftMove() {
@@ -383,7 +387,7 @@ public class RaceTrack extends JPanel {
 	}
 	/** returns false if it is possible to move right, true if the path is blocked. */
 	private boolean rightPathBlocked() {
-		return (carXPos+carWidth>=getWidth() || (carXPos+carWidth>=getWidth()*3/8 && carXPos<=getWidth()*5/8 && carYPos>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
+		return (carXPos+carWidth>=getWidth() || (carXPos+carWidth>=getWidth()*3/8 && carXPos+carWidth<=getWidth()*5/8 && carYPos+carLength>=getHeight()*3/8 && carYPos<=getHeight()*5/8));
 	}
 	
 	private void rightMove() {
