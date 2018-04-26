@@ -58,4 +58,6 @@ Game window can be resized before starting to play in any resolution.
 
 
 ## Agile 3
-nothing yet!
+![Sprint3 New Menu](https://i.imgur.com/oQZH5e7.png)
+![Sprint3 gameplay](https://i.imgur.com/71CfKyE.png)
+![Sprint3 Win Screen](https://i.imgur.com/g2zICke.png)
