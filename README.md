@@ -1,5 +1,5 @@
 # Procrastination-Racer
-Final project showing java knowledge by making a race car game. Done by splitting it into three sprints, one per week.
+Final project showing Java knowledge by making a race car game with agile requirements. Done by splitting it into three sprints, one per week. 
 
 ## Controls/Options
 wasd keys or arrow keys to move, space to start. 
@@ -19,17 +19,16 @@ Game window can be resized before starting to play in any resolution.
 * Obstacles in road to avoid.
 * Game timer starts when player is ready. (3, 2, 1, GO!)
 
-### Sprint 3 Plan(final):
+### Sprint 3 Plan(final version):
 * Car feel like an actual car (not a block shuffling around).
-* Fix layout. (GridBagLayoutDemo or BoxLayout)
+* Improve layout. (GridBagLayoutDemo or BoxLayout)
 * Handles checked exceptions. 
 * Clean (readable) code
-* Lambda Expressions?????
-* Polymorphism ??
-* More fun???
+* Polymorphism
+* More fun
 * (optional) Graphics not as bad.
 
-**Final should also have the following as needed:**
+**Final should also have the following if needed:**
 * Write Java code that uses variables, arrays, conditional and loop constructs
 * Manipulate primitive numeric data and string data using Java operators
 * Create Java classes and use object references
@@ -61,3 +60,8 @@ Game window can be resized before starting to play in any resolution.
 ![Sprint3 New Menu](https://i.imgur.com/oQZH5e7.png)
 ![Sprint3 gameplay](https://i.imgur.com/71CfKyE.png)
 ![Sprint3 Win Screen](https://i.imgur.com/g2zICke.png)
+
+# 1.0 Results/Thoughts
+A lot of stuff I could've improved still. Nothing's really looks at all like I wanted from the original planning documents. The requirements had to change a lot as I learned what Java (mostly swing) was capable of and what good programming practice would be. I wouldn't want to try and design a GUI with moving components using swing ever again. Especially not a game. I choose something that would interest me instead of creating a bunch of buttons that run different SQL queries. That big game window gave me so much more trouble than a simple grid layout with button would've. 
+
+my Swing experience in short: Making a calculator, good idea. Making a racing game, bad idea. 
