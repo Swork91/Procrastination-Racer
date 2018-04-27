@@ -19,9 +19,11 @@ import launcher.SaveLoadDataStream;
  * objects to be used on the track. 
  ****************************************************************/
 public class RaceTrack extends JPanel {
-	private Image raceTrackImage = new ImageIcon("images\\raceTrackBG1.png").getImage();
-    private Image carImage = new ImageIcon("images\\car1.png").getImage();
+	protected Image raceTrackImage = new ImageIcon("images\\raceTrackBG1.png").getImage();
+    protected Image carImage = new ImageIcon("images\\car1.png").getImage();
     private Image startOverlay = new ImageIcon("images\\Procrastination_Racer_Start_Menu.png").getImage();
+    
+    protected Color middleBoundry = Color.GREEN;
     
 	private int carXPos = 0;
 	private int carYPos = 0;
@@ -224,7 +226,7 @@ public class RaceTrack extends JPanel {
         if (reverseControls)
 	        g.setColor(Color.RED);
         else
-        	g.setColor(Color.GREEN);
+        	g.setColor(middleBoundry);
 
         g.fillRect(getWidth()*3/8, getHeight()*3/8, getWidth()/4, getHeight()/4);// inner out of bounds
         

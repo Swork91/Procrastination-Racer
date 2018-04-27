@@ -30,8 +30,8 @@ public class RaceInfoHUD extends JPanel {
 	
 	private static int timeMiliSeconds = -1;
 	private static int winLaps = 5;
-	private static int randomX = ThreadLocalRandom.current().nextInt(0, 1650);
-	private static int randomY = ThreadLocalRandom.current().nextInt(0, 900);
+	private static int randomX = 0;
+	private static int randomY = 0;
 	private static SimpleDateFormat formatter = new SimpleDateFormat("m:ss.SS");
 	private static String srecordBestTotalTime = formatter.format(SaveLoadDataStream.getBestTotalTime());
 	private static String srecordBestLapTime = formatter.format(SaveLoadDataStream.getBestLapTime());
@@ -68,8 +68,8 @@ public class RaceInfoHUD extends JPanel {
 			if (RaceTrack.getLapNumber() != winLaps && timeMiliSeconds>=0)
 				timeMiliSeconds++; //TODO stop the timer, not just my counter. Does 'timer.stop();' work?
 			if (timeMiliSeconds%5000==0) {
-		    	randomX = ThreadLocalRandom.current().nextInt(0, getWidth());
-		    	randomY = ThreadLocalRandom.current().nextInt(0, getHeight());
+		    	randomX = ThreadLocalRandom.current().nextInt(0, getWidth()-getWidth()/8);
+		    	randomY = ThreadLocalRandom.current().nextInt(0, getHeight()-getHeight()/8);
 			}
 			String result = formatter.format(timeMiliSeconds);
 			seconds.setText(result);
