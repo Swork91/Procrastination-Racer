@@ -21,7 +21,7 @@ import launcher.SaveLoadDataStream;
 public class RaceTrack extends JPanel {
 	protected Image raceTrackImage = new ImageIcon("images\\raceTrackBG1.png").getImage();
     protected Image carImage = new ImageIcon("images\\car1.png").getImage();
-    private Image startOverlay = new ImageIcon("images\\Procrastination_Racer_Start_Menu.png").getImage();
+    protected Image startOverlay = new ImageIcon("images\\Procrastination_Racer_Start_Menu.png").getImage();
     
     protected Color middleBoundry = Color.GREEN;
     
@@ -52,156 +52,159 @@ public class RaceTrack extends JPanel {
 				boolean done = false;
 				do {
 					switch (e.getKeyCode()) {
-					/** DOWN PRESSED */
-					case (KeyEvent.VK_DOWN):
-						speed = getHeight()/50;
-						if (reverseControls) {
-							if (upPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								upMove();
-								done = true;
-								break;
-							}
-						}
-						else {
-							if (downPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								downMove();
-								if (hitPuddle()) {
-									reverseControls = true;
-									done = true;
-									break;
-								}
-								done = true;
-								break;
-							}
-						}
-					/** UP PRESSED */
-					case KeyEvent.VK_UP: 
-						speed = getHeight()/50;
-						if (reverseControls) {
-							if (downPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								downMove();
-								done = true;
-								break;
-							}
-						}
-						else {
-							if (upPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								upMove();
-								if (hitPuddle()) {
-									reverseControls = true;
-									done = true;
-									break;
-								}
-								done = true;
-								break;
-							}
-						}
-					/** LEFT PRESSED */
-					case KeyEvent.VK_LEFT: 
-						speed = getHeight()/50;
-						if (reverseControls) {
-							if (rightPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								rightMove();
-								done = true;
-								break;
-							}
-						}
-						else {
-							if (leftPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								leftMove();
-								if (hitPuddle()) {
-									reverseControls = true;
-									done = true;
-									break;
-								}
-								done = true;
-								break;
-							}
-						}
-					/** RIGHT PRESSED */
-					case KeyEvent.VK_RIGHT: 
-						speed = getHeight()/50;
-						if (reverseControls) {
-							if (leftPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								leftMove();
-								done = true;
-								break;
-							}
-						}
-						else {
-							if (rightPathBlocked()) {
-								done = true;
-								break;
-							}
-							else {
-								rightMove();
-								if (hitPuddle()) {
-									reverseControls = true;
-									done = true;
-									break;
-								}
-								done = true;
-								break;
-							}
-						}
-					/** - Alternate Controls - 
-					 * Link to normal controls and don't
-					 *  give the loop's exit condition */
-					case KeyEvent.VK_W:
-						e.setKeyCode(KeyEvent.VK_UP);
-						break;
-					case KeyEvent.VK_A:
-						e.setKeyCode(KeyEvent.VK_LEFT);
-						break;
-					case KeyEvent.VK_S:
-						e.setKeyCode(KeyEvent.VK_DOWN);
-						break;
-					case KeyEvent.VK_D:
-						e.setKeyCode(KeyEvent.VK_RIGHT);
-						break;
-					/** CHEAT KEY PRESSED */
-					case KeyEvent.VK_C:
-						lapNumber=5;
-						done = true;
-						break;
-					/** start game */
-					case KeyEvent.VK_SPACE:
-						if (!didGameStart) {
-							lapNumber=0;
+						/** DOWN PRESSED */
+						case (KeyEvent.VK_DOWN):
 							speed = getHeight()/50;
-							gameStart();
-						}
-						done = true;
-						break;
-					}
+							if (reverseControls) {
+								if (upPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									upMove();
+									done = true;
+									break;
+								}
+							}
+							else {
+								if (downPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									downMove();
+									if (hitPuddle()) {
+										reverseControls = true;
+										done = true;
+										break;
+									}
+									done = true;
+									break;
+								}
+							}
+						/** UP PRESSED */
+						case KeyEvent.VK_UP: 
+							speed = getHeight()/50;
+							if (reverseControls) {
+								if (downPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									downMove();
+									done = true;
+									break;
+								}
+							}
+							else {
+								if (upPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									upMove();
+									if (hitPuddle()) {
+										reverseControls = true;
+										done = true;
+										break;
+									}
+									done = true;
+									break;
+								}
+							}
+						/** LEFT PRESSED */
+						case KeyEvent.VK_LEFT: 
+							speed = getHeight()/50;
+							if (reverseControls) {
+								if (rightPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									rightMove();
+									done = true;
+									break;
+								}
+							}
+							else {
+								if (leftPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									leftMove();
+									if (hitPuddle()) {
+										reverseControls = true;
+										done = true;
+										break;
+									}
+									done = true;
+									break;
+								}
+							}
+						/** RIGHT PRESSED */
+						case KeyEvent.VK_RIGHT: 
+							speed = getHeight()/50;
+							if (reverseControls) {
+								if (leftPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									leftMove();
+									done = true;
+									break;
+								}
+							}
+							else {
+								if (rightPathBlocked()) {
+									done = true;
+									break;
+								}
+								else {
+									rightMove();
+									if (hitPuddle()) {
+										reverseControls = true;
+										done = true;
+										break;
+									}
+									done = true;
+									break;
+								}
+							}
+						/** - Alternate Controls - 
+						 * Link to normal controls and don't
+						 *  give the loop's exit condition */
+						case KeyEvent.VK_W:
+							e.setKeyCode(KeyEvent.VK_UP);
+							break;
+						case KeyEvent.VK_A:
+							e.setKeyCode(KeyEvent.VK_LEFT);
+							break;
+						case KeyEvent.VK_S:
+							e.setKeyCode(KeyEvent.VK_DOWN);
+							break;
+						case KeyEvent.VK_D:
+							e.setKeyCode(KeyEvent.VK_RIGHT);
+							break;
+						/** CHEAT KEY PRESSED */
+						case KeyEvent.VK_C:
+							lapNumber=5;
+							done = true;
+							break;
+						/** start game */
+						case KeyEvent.VK_SPACE:
+							if (!didGameStart) {
+								lapNumber=0;
+								speed = getHeight()/50;
+								gameStart();
+							}
+							done = true;
+							break;
+						default:
+							done = true;
+							break;
+					}//end switch
 				} while(!done);
 				repaint();
 				checkpointSystem();
